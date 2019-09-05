@@ -3,7 +3,8 @@ final class IndexController extends BaseController
 {
     public static function Home()
     {
-        parent::Authorize();
-        echo Response::OK("This is home");
+        $currentUser = parent::Authorize();
+        // Example, use parents or returned user
+        echo Response::OK("This is home for: " . parent::$currentUser->firstname . " " . $currentUser->lastname);
     }
 }

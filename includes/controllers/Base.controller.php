@@ -11,6 +11,7 @@
  */
 class BaseController
 {
+    protected static $currentUser;
     public function __construct()
     { }
 
@@ -20,6 +21,14 @@ class BaseController
         if ($response::$statusCode === 401) {
             echo Response::AccessDenied($response::$message . ". " . $response::$data);
             die;
+        } else {
+            self::$currentUser = new AppUser(
+                $response::$data->data->id,
+                $response::$data->data->firstname,
+                $response::$data->data->lastname,
+                $response::$data->data->email
+            );
+            return self::$currentUser;
         }
     }
 

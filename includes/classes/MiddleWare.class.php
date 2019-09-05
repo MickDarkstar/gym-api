@@ -10,15 +10,14 @@ use \Firebase\JWT\JWT;
  */
 class MiddleWare
 {
-
     public static function VerifyPassword($data, AppUser $user)
     {
         if (password_verify($data->password, $user->password)) {
             $token = array(
-                "iss" => iss,
-                "aud" => aud,
-                "iat" => iat,
-                "nbf" => nbf,
+                "iss" => ISS,
+                "aud" => AUD,
+                "iat" => IAT,
+                "nbf" => NBF,
                 "data" => array(
                     "id" => $user->id,
                     "firstname" => $user->firstname,
@@ -32,10 +31,13 @@ class MiddleWare
                 "Access granted",
                 array(
                     "jwt" => $jwt,
-                    "expiresIn" => nbf,
-                    "firstname" => $user->firstname,
-                    "lastname" => $user->lastname,
-                    "email" => $user->email
+                    "expiresIn" => NBF,
+                    "user" => array(
+                        "id" => $user->id,
+                        "firstname" => $user->firstname,
+                        "lastname" => $user->lastname,
+                        "email" => $user->email
+                    )
                 )
             );
         } else {
@@ -50,7 +52,7 @@ class MiddleWare
     {
         $headers = apache_request_headers();
         if (isset($headers['Authorization']) == false) {
-            return MiddleWareMessage::Get(401, "Access denied. Header not set");
+            return MiddleWareMessage::Get(401, "Access denied. Auth-header not set");
             exit;
         }
         $TOKEN = $headers['Authorization'];
@@ -64,14 +66,5 @@ class MiddleWare
         } else {
             return MiddleWareMessage::Get(401, "Access denied. Token not set.");
         }
-    }
-    /**
-     * Validates and decodes jwt-token
-     * response is array containing current user
-     */
-    public static function DecodeToken()
-    {
-        $decoded = self::Authorize();
-        return MiddleWareMessage::Get(401, "Access granted.", $decoded->data);
     }
 }
