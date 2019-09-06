@@ -19,40 +19,59 @@ final class ExerciseController extends BaseController
         parent::Authorize();
 
         $result = $this->service->getAll();
-        echo Response::Ok("All exercices", $result);
+        echo Response::Ok("All exercises", $result);
     }
 
-    public function Create()
+    public static function Create()
     {
+        echo Response::Warning("NOT IMPLEMENTED");
+        parent::Authorize();
+
         $data = parent::HttpRequestInput();
 
-        $model = new Exercise(
-            $data->firstname,
-            $data->lastname,
-            $data->email,
-            $data->password
+        // Redundant.... validate input instead and create exercise directly
+        $model = new ExerciseCreateDTO(
+            $data->muscleId,
+            $data->name,
+            $data->type,
+            $data->level
         );
-        $result = $this->service->Create($model);
-        echo Response::Created("Profile created", $result);
+        $exercise = new Exercise(
+            null,
+            parent::$currentUser->id,
+            $model->muscleId,
+            $model->name,
+            $model->type,
+            $model->level
+        );
+        $result = $this->service->Create($exercise);
+        echo Response::Created("Exercise created", $result);
     }
 
     public function Update()
     {
+        echo Response::Warning("NOT IMPLEMENTED");
+
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
-        
-        $model = new Exercise(
+
+        $model = new ExerciseUpdateDTO(
             $data->id,
-            $data->firstname,
-            $data->lastname,
-            $data->email
+            $data->muscleId,
+            $data->name,
+            $data->type,
+            $data->level
         );
-        $exists = $this->service->exerciseExist($model->id);
-        if ($exists === false) {
+        $exercise = $this->service->getById($model->id);
+        if ($exercise === null) {
             echo Response::Warning("Exercise does not exist");
         } else {
-            $result = $this->service->update($model);
+            $exercise->muscleId = $model->muscleId;
+            $exercise->name     = $model->name;
+            $exercise->type     = $model->type;
+            $exercise->level    = $model->level;
+            $result = $this->service->update($exercise);
             echo Response::Ok("Updated exercise info", $result);
         }
     }

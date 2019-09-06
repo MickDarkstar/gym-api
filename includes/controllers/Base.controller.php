@@ -11,6 +11,10 @@
  */
 class BaseController
 {
+    /**
+     *
+     * @var AppUser
+     */
     protected static $currentUser;
     public function __construct()
     { }

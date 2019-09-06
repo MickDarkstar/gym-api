@@ -48,3 +48,26 @@ Route::set('login', function () {
             break;
     }
 });
+
+Route::set('exercices', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new ExerciseController();
+
+    switch ($httpRequest) {
+        case 'GET':
+            $controller->All()();
+            break;
+
+        case 'POST':
+            $controller->Create();
+            break;
+
+        case 'PUT':
+            $controller->Update();
+            break;
+
+        default:
+            echo Response::MethodNotAllowed();
+            break;
+    }
+});

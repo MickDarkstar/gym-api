@@ -164,8 +164,11 @@ final class ExerciseRepository extends BaseRepository
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return self::mapToModel($row);
+        if($row) {
+            return self::mapToModel($row);
+        } else {
+            return null;
+        }
     }
 
     public function update(Exercise $exercise)
