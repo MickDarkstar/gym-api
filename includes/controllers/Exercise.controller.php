@@ -56,6 +56,7 @@ final class ExerciseController extends BaseController
 
         $data = parent::HttpRequestInput();
 
+        // TOdo: work around, bad idéa with DTOs here. not neeeded as it´s shortlived. We always get or create instance of domain models. Thet can act as DTOs
         $model = new ExerciseUpdateDTO(
             $data->id,
             $data->muscleId,
