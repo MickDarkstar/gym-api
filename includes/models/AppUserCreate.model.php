@@ -1,6 +1,6 @@
 <?php
 
-final class CreateUser
+final class AppUserCreate
 {
     public $firstname;
     public $lastname;

@@ -9,26 +9,21 @@ final class UserRepository extends BaseRepository
 {
     const DB_TABLE = "users";
 
-    private $db;
-
     public function __construct(PDO $pdo = null)
     {
-        parent::__construct();
-
-        if (isset($pdo))
-            $this->db = $pdo;
-        else
-            $this->db = parent::$dbHandle;
+        parent::__construct($pdo);
     }
 
     public function all()
     {
         $list = [];
-        $req = $this->db->query("SELECT * FROM `" . self::DB_TABLE . "` ORDER BY created");
+        $req = self::$dbHandle->query("SELECT * FROM `" . self::DB_TABLE . "` ORDER BY created");
         $req->execute();
-        foreach ($req->fetchAll() as $result) {
-            $list[] = self::mapToObject($result);
-        }
+        // foreach ($req->fetchAll() as $result) {
+        //     $list[] = self::mapToObject($result);
+        // }
+        $result = $req->fetchAll();
+        $list[] = self::mapToObjects($result);
         return $list;
     }
 
@@ -44,7 +39,7 @@ final class UserRepository extends BaseRepository
                     WHERE email = ?
                     LIMIT 0,1";
 
-        $stmt = $this->db->prepare($query);
+        $stmt = self::$dbHandle->prepare($query);
         $email = htmlspecialchars(strip_tags($email));
         $stmt->bindParam(1, $email);
         $stmt->execute();
@@ -67,7 +62,7 @@ final class UserRepository extends BaseRepository
                     WHERE email = ?
                     LIMIT 0,1";
 
-        $stmt = $this->db->prepare($query);
+        $stmt = self::$dbHandle->prepare($query);
         $email = htmlspecialchars(strip_tags($email));
         $stmt->bindParam(1, $email);
         $stmt->execute();
@@ -89,7 +84,7 @@ final class UserRepository extends BaseRepository
     public function find($id)
     {
         $id = intval($id);
-        $req = $this->db->prepare("SELECT * FROM `" . self::DB_TABLE . "` WHERE id = :id");
+        $req = self::$dbHandle->prepare("SELECT * FROM `" . self::DB_TABLE . "` WHERE id = :id");
         $req->execute(array('id' => $id));
         $result = $req->fetch();
 
@@ -104,7 +99,7 @@ final class UserRepository extends BaseRepository
     public function create(CreateUser $user)
     {
         $now = date("Y-m-d");
-        $req = $this->db->prepare("INSERT INTO `" . self::DB_TABLE . "`(firstname, lastname, password, email, created) VALUES(:firstname, :lastname, :password, :email, :created)");
+        $req = self::$dbHandle->prepare("INSERT INTO `" . self::DB_TABLE . "`(firstname, lastname, password, email, created) VALUES(:firstname, :lastname, :password, :email, :created)");
         $req->bindParam(':firstname', $user->firstname, PDO::PARAM_STR);
         $req->bindParam(':lastname', $user->lastname, PDO::PARAM_STR);
         $req->bindParam(':password', $user->password);
@@ -122,9 +117,9 @@ final class UserRepository extends BaseRepository
      * Saves an existing AppUser in database and return is on success
      * @param AppUser $user
      */
-    public function update(UpdateUserinfo $user)
+    public function update(AppUserUpdate $user)
     {
-        $req = $this->db->prepare("UPDATE `" . self::DB_TABLE . "` SET firstname=:firstname, lastname=:lastname, email=:email WHERE :id=id");
+        $req = self::$dbHandle->prepare("UPDATE `" . self::DB_TABLE . "` SET firstname=:firstname, lastname=:lastname, email=:email WHERE :id=id");
         $req->bindParam(':id', $user->id, PDO::PARAM_INT);
         $req->bindParam(':firstname', $user->firstname, PDO::PARAM_STR);
         $req->bindParam(':lastname', $user->lastname, PDO::PARAM_STR);
@@ -148,6 +143,11 @@ final class UserRepository extends BaseRepository
         );
     }
 
+    /**
+     * Maps data from current table to an array of objects
+     * @param array[] $result
+     * @return AppUser[] $user
+     */
     private function mapToObjects($rows)
     {
         if ($rows == null) {

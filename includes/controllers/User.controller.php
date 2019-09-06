@@ -44,7 +44,7 @@ final class UserController extends BaseController
     {
         $data = parent::HttpRequestInput();
 
-        $user = new CreateUser(
+        $user = new AppUserCreate(
             $data->firstname,
             $data->lastname,
             $data->email,
@@ -63,7 +63,7 @@ final class UserController extends BaseController
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
-        $user = new UpdateUserinfo(
+        $user = new AppUserUpdate(
             $data->id,
             $data->firstname,
             $data->lastname,

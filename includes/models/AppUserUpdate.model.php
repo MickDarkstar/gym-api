@@ -1,6 +1,6 @@
 <?php
 
-final class UpdateUserinfo
+final class AppUserUpdate
 {
     public $id;
     public $firstname;

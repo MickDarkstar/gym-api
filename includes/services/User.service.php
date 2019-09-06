@@ -1,7 +1,7 @@
 <?php
 
 /**
- * UserService for login user in session, checking if user is authenticated and to get an instance of current user as AppUser
+ * UserService
  *
  * @version 2.0
  * @author Mick
@@ -48,14 +48,14 @@ final class UserService
 		return $this->repository->getByEmail($email);
 	}
 
-	public function create(CreateUser $user)
+	public function create(AppUserCreate $user)
 	{
 		$user = $this->sanitize($user);
 		$user->password = password_hash($user->password, PASSWORD_BCRYPT);
 		return $this->repository->create($user);
 	}
 
-	public function update(UpdateUserinfo $user)
+	public function update(AppUserUpdate $user)
 	{
 		$user = $this->sanitize($user);
 		return $this->repository->update($user);
