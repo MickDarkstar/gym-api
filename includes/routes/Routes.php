@@ -4,7 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
+// Todo: proper router with less redundancy of code. Get rid of switch-cases and $httpRequest = $_SERVER['REQUEST_METHOD'];
 Route::set('index.php', function () {
     IndexController::Home();
 });
@@ -14,6 +14,9 @@ Route::set('users', function () {
     $controller = new UserController();
 
     switch ($httpRequest) {
+        case 'OPTIONS':
+            echo Response::OK("Preflight OK!");
+            break;
         case 'GET':
             $controller->AllUsers();
             break;
@@ -37,11 +40,11 @@ Route::set('login', function () {
     $controller = new UserController();
 
     switch ($httpRequest) {
-        case 'POST':
-            $controller->Login();
-            break;
         case 'OPTIONS':
             echo Response::OK("Preflight OK!");
+            break;
+        case 'POST':
+            $controller->Login();
             break;
         default:
             echo Response::MethodNotAllowed();
@@ -54,6 +57,9 @@ Route::set('exercises', function () {
     $controller = new ExerciseController();
 
     switch ($httpRequest) {
+        case 'OPTIONS':
+            echo Response::OK("Preflight OK!");
+            break;
         case 'GET':
             $controller->All();
             break;
