@@ -1,5 +1,5 @@
 <?php
-
+// Todo: move to function in AppUser
 final class AppUserCreate
 {
     public $firstname;

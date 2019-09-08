@@ -1,7 +1,7 @@
 <?php
 final class ExerciseRepository extends BaseRepository
 {
-    private const DB_TABLE = "users";
+    const DB_TABLE = "exercise";
 
     public function __construct(PDO $pdo = null)
     {
@@ -10,20 +10,17 @@ final class ExerciseRepository extends BaseRepository
 
     private function mapToModel($row)
     {
-        $exercise = new Exercise(
+        $model = new Exercise(
             $row['id'],
-            $row['createdByUserId'],
             $row['muscleId'],
             $row['name'],
             $row['type'],
             $row['level']
         );
-        $exercise->created = $row['created'];
-        $exercise->modifiedByUserId = $row['modifiedByUserId'];
-        $exercise->modified = $row['modified'];
-        return $exercise;
-    }
 
+        $model = self::mapHistoricalData($model, $row);
+        return $model;
+    }
 
     private function mapToModels($rows)
     {
@@ -97,40 +94,31 @@ final class ExerciseRepository extends BaseRepository
      */
     public function muscleExists(int $muscleId)
     {
-        // query to check if email exists
         $query = "SELECT id password
                     FROM " . self::DB_TABLE . "
                     WHERE id = ?
                     LIMIT 0,1";
 
-        // prepare the query
         $stmt = self::$dbHandle->prepare($query);
 
-        // sanitize
         $muscleId = htmlspecialchars(strip_tags($muscleId));
 
-        // bind given muscleId value
         $stmt->bindParam(1, $muscleId);
 
-        // execute the query
         $stmt->execute();
 
-        // get number of rows
         $num = $stmt->rowCount();
 
-        // if email exists, assign values to object properties for easy access and use for php sessions
         if ($num > 0) {
-            // return true because muscleId exists in the database
             return true;
         }
 
-        // return false if muscleId does not exist in the database
         return false;
     }
 
     public function create(Exercise $exercise)
     {
-        $query = "INSERT INTO " . $this->table_name . "
+        $query = "INSERT INTO " . self::DB_TABLE . "
         SET
             createdByUserId = :createdByUserId,
             name = :name,
@@ -153,7 +141,7 @@ final class ExerciseRepository extends BaseRepository
     public function getById(string $id)
     {
         $query = "SELECT *
-                    FROM " . $this->table_name . "
+                    FROM " . self::DB_TABLE . "
                     WHERE id = ?
                     LIMIT 0,1";
 
@@ -164,7 +152,7 @@ final class ExerciseRepository extends BaseRepository
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($row) {
+        if ($row) {
             return self::mapToModel($row);
         } else {
             return null;
@@ -173,16 +161,18 @@ final class ExerciseRepository extends BaseRepository
 
     public function update(Exercise $exercise)
     {
-        $query = "UPDATE " . $this->table_name . "
+        $query = "UPDATE " . self::DB_TABLE . "
             SET
+                modifiedByUserId = :modifiedByUserId,
                 name = :name,
                 type = :type,
                 muscleId = :muscleId,
                 level = :level
             WHERE id = :id";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = self::$dbHandle->prepare($query);
 
+        $stmt->bindParam(':modifiedByUserId', $exercise->modifiedByUserId);
         $stmt->bindParam(':name', $exercise->name);
         $stmt->bindParam(':type', $exercise->type);
         $stmt->bindParam(':muscleId', $exercise->muscleId);
@@ -196,18 +186,39 @@ final class ExerciseRepository extends BaseRepository
 
         return false;
     }
-    
+
     public function getAll()
     {
         $query = "SELECT *
-        FROM " . $this->table_name;
+        FROM " . self::DB_TABLE;
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = self::$dbHandle->prepare($query);
 
         $stmt->execute();
 
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return self::mapToModels($rows);
+    }
+
+    public function delete(Exercise $exercise)
+    {
+        $query = "DELETE
+                    FROM " . self::DB_TABLE . "
+                    WHERE id = ?
+                    ";
+
+        $stmt = self::$dbHandle->prepare($query);
+
+        $stmt->bindParam(1, $exercise->id);
+
+        $stmt->execute();
+
+        $num = $stmt->rowCount();
+
+        if ($num > 0) {
+            return true;
+        }
+        return false;
     }
 }

@@ -85,6 +85,7 @@ final class ExerciseService
 
     public function update(Exercise $exercise)
     {
+        // Todo: Validate updated fields
         $exercise = $this->sanitize($exercise);
         return $this->repository->update($exercise);
     }
@@ -94,9 +95,15 @@ final class ExerciseService
         return $this->repository->getAll();
     }
 
+    public function delete(Exercise $exercise)
+    {
+        return $this->repository->delete($exercise);
+    }
+
     private function sanitize(Exercise $exercise)
     {
         $exercise->createdByUserId = htmlspecialchars(strip_tags($exercise->createdByUserId));
+        $exercise->modifiedByUserId = htmlspecialchars(strip_tags($exercise->modifiedByUserId));
         $exercise->name = htmlspecialchars(strip_tags($exercise->name));
         $exercise->type = htmlspecialchars(strip_tags($exercise->type));
         $exercise->muscleId = htmlspecialchars(strip_tags($exercise->muscleId));

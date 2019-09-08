@@ -1,16 +1,16 @@
 <?php
-class Muscle
+final class Muscle
 {
     /**
-     * @public number $id          Should contain a unique id
+     * @var number $id          Should contain a unique id
      */
     public $id;
     /**
-     * @public string $name        Should contain a description
+     * @var string $name        Should contain a description
      */
     public $name;
     /**
-     * @public string $muscleGroup Should contain a MuscleGroup
+     * @var string $muscleGroup Should contain a MuscleGroup
      */
     public $muscleGroup;
 

@@ -1,20 +1,15 @@
 <?php
-class EntryDetail
+// Todo: break down to separate create, update-models
+final class EntryDetail extends Base
 {
     /**
-     * @param int id
+     * @var int id
      */
     public $id;
     /**
-     * @param int entry id
+     * @var int entry id
      */
     public $entryId;
-
-    /**
-     * @param int created by user
-     */
-    public $createdByUserId;
-    
     /**
      * @param Exercise exercise id
      */
@@ -27,9 +22,8 @@ class EntryDetail
     public $comment;
 
     public function __construct(
-        $id = null, 
+        $id = null,
         int $entryId,
-        int $createdByUserId,
         Exercise $exercise,
         $weight,
         $reps,
@@ -37,11 +31,9 @@ class EntryDetail
         $sets,
         $date = null,
         $comment
-        )
-    {
+    ) {
         $this->id = $id;
         $this->entryId = $entryId;
-        $this->createdByUserId = $createdByUserId;
         $this->exercise = $exercise;
         $this->weight = $weight;
         $this->reps = $reps;

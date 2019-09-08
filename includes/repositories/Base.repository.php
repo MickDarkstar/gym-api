@@ -17,4 +17,13 @@ class BaseRepository
     else
       $this::$dbHandle = $pdo;
   }
+
+  protected static function setHistoricalData($model, $row)
+  {
+    $model->setCreatedByUserId($row['createdByUserId']);
+    $model->created = $row['created'];
+    $model->setModifiedByUserId($row['modifiedByUserId']);
+    $model->modified = $row['modified'];
+    return $model;
+  }
 }

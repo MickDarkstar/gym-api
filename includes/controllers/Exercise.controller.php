@@ -22,27 +22,18 @@ final class ExerciseController extends BaseController
         echo Response::Ok("All exercises", $result);
     }
 
-    public static function Create()
+    public function Create()
     {
-        echo Response::Warning("NOT IMPLEMENTED");
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
 
-        // Redundant.... validate input instead and create exercise directly
-        $model = new ExerciseCreateDTO(
+        $exercise = Exercise::Create(
+            parent::$currentUser,
             $data->muscleId,
             $data->name,
             $data->type,
             $data->level
-        );
-        $exercise = new Exercise(
-            null,
-            parent::$currentUser->id,
-            $model->muscleId,
-            $model->name,
-            $model->type,
-            $model->level
         );
         $result = $this->service->Create($exercise);
         echo Response::Created("Exercise created", $result);
@@ -50,30 +41,37 @@ final class ExerciseController extends BaseController
 
     public function Update()
     {
-        echo Response::Warning("NOT IMPLEMENTED");
-
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
-
-        // TOdo: work around, bad idéa with DTOs here. not neeeded as it´s shortlived. We always get or create instance of domain models. Thet can act as DTOs
-        $model = new ExerciseUpdateDTO(
-            $data->id,
-            $data->muscleId,
-            $data->name,
-            $data->type,
-            $data->level
-        );
-        $exercise = $this->service->getById($model->id);
+        $exercise = $this->service->getById($data->id);
         if ($exercise === null) {
             echo Response::Warning("Exercise does not exist");
         } else {
-            $exercise->muscleId = $model->muscleId;
-            $exercise->name     = $model->name;
-            $exercise->type     = $model->type;
-            $exercise->level    = $model->level;
+            $exercise->Update(
+                parent::$currentUser,
+                $data->muscleId,
+                $data->name,
+                $data->type,
+                $data->level
+            );
             $result = $this->service->update($exercise);
-            echo Response::Ok("Updated exercise info", $result);
+
+            echo ($result) ? Response::Ok("Updated exercise info", $result) : Response::Ok("Could not update exercise info", $result);
+        }
+    }
+
+    public function Delete()
+    {
+        parent::Authorize();
+
+        $data = parent::HttpRequestInput();
+        $exercise = $this->service->getById($data->id);
+        if ($exercise === null) {
+            echo Response::Warning("Exercise does not exist");
+        } else {
+            $result = $this->service->delete($exercise);
+            echo Response::Ok("Deleted exercise", $result);
         }
     }
 }

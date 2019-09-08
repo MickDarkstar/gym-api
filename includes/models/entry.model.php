@@ -1,14 +1,7 @@
 <?php
-class Entry
+final class Entry extends Base
 {
-    /**
-     * @param int id
-     */
     public $id;
-    /**
-     * @param int created by user
-     */
-    public $createdByUserId;
     /**
      * @param DateTime date of performance
      */
@@ -17,15 +10,12 @@ class Entry
     public $comment;
 
     public function __construct(
-        $id = null, 
-        int $createdByUserId, 
+        $id = null,
         $date,
         $entryDetails,
         $comment
-        )
-    {
+    ) {
         $this->id = $id;
-        $this->createdByUserId = $createdByUserId;
         $this->date = $date;
         $this->entryDetails = $entryDetails;
         $this->comment = $comment;

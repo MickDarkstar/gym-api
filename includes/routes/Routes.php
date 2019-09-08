@@ -49,21 +49,22 @@ Route::set('login', function () {
     }
 });
 
-Route::set('exercices', function () {
+Route::set('exercises', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new ExerciseController();
 
     switch ($httpRequest) {
         case 'GET':
-            $controller->All()();
+            $controller->All();
             break;
-
         case 'POST':
             $controller->Create();
             break;
-
         case 'PUT':
             $controller->Update();
+            break;
+        case 'DELETE':
+            $controller->Delete();
             break;
 
         default:
