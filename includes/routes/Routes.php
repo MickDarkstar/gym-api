@@ -78,3 +78,73 @@ Route::set('exercises', function () {
             break;
     }
 });
+
+Route::set('entrydetails', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new EntryController();
+
+    switch ($httpRequest) {
+        case 'OPTIONS':
+            echo Response::OK("Preflight OK!");
+            break;
+        case 'GET':
+            $controller->All();
+            break;
+        case 'POST':
+            $controller->CreateEntryDetail();
+            break;
+        case 'PUT':
+            $controller->UpdateEntryDetail();
+            break;
+        case 'DELETE':
+            $controller->DeleteEntryDetail();
+            break;
+
+        default:
+            echo Response::MethodNotAllowed();
+            break;
+    }
+});
+
+Route::set('entries', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new EntryController();
+    switch ($httpRequest) {
+        case 'OPTIONS':
+            echo Response::OK("Preflight OK!");
+            break;
+        case 'GET':
+            $controller->All();
+            break;
+        case 'POST':
+            $controller->CreateEntry();
+            break;
+        case 'PUT':
+            $controller->UpdateEntry();
+            break;
+        case 'DELETE':
+            $controller->DeleteEntry();
+            break;
+
+        default:
+            echo Response::MethodNotAllowed();
+            break;
+    }
+});
+
+Route::set('currententry', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new EntryController();
+    switch ($httpRequest) {
+        case 'OPTIONS':
+            echo Response::OK("Preflight OK!");
+            break;
+        case 'GET':
+            $controller->Current();
+            break;
+
+        default:
+            echo Response::MethodNotAllowed();
+            break;
+    }
+});

@@ -42,4 +42,46 @@ final class EntryDetail extends Base
         $this->date = $date;
         $this->comment = $comment;
     }
+
+    public static function Create(
+        int $entryId,
+        Exercise $exercise,
+        $weight,
+        $reps,
+        $rest,
+        $sets,
+        $date = null,
+        $comment
+    ) {
+        $self = new self(
+            null,
+            $entryId,
+            $exercise,
+            $weight,
+            $reps,
+            $rest,
+            $sets,
+            $date,
+            $comment
+        );
+        return $self;
+    }
+
+    public function Update(
+        Exercise $exercise,
+        $weight,
+        $reps,
+        $rest,
+        $sets,
+        $date = null,
+        $comment
+    ) {
+        $this->exercise = $exercise;
+        $this->weight   = $weight;
+        $this->reps     = $reps;
+        $this->rest     = $rest;
+        $this->sets     = $sets;
+        $this->date     = $date;
+        $this->comment  = $comment;
+    }
 }
