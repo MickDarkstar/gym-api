@@ -42,11 +42,10 @@ final class EntryRepository extends BaseRepository
         if ($row == null) {
             return null;
         }
-        $exercise = $this->exerciseService->getById($row['exerciseId']);
+        $exercise = $this->exerciseRepository->getById($row['exerciseId']);
         $entryDetail = new EntryDetail(
             $row['id'],
             $row['entryId'],
-            $row['createdByUserId'],
             $exercise,
             $row['weight'],
             $row['reps'],
@@ -136,38 +135,20 @@ final class EntryRepository extends BaseRepository
         $query = "INSERT INTO " . self::TABLE_ENTRY_DETAIL . "
         SET
             createdByUserId = :createdByUserId,
-            exerciseId = :exerciseId,
             entryId = :entryId,
-            weight = :weight,
-            reps = :reps,
-            sets = :sets,
-            rest = :rest,
-            date = :date,
-            comment = :comment
+            exerciseId = :exerciseId
             ";
 
         $stmt = self::$dbHandle->prepare($query);
-
-        $model = $this->sanitizeEntryDetail($model);
 
         // Should be default date for server, client should be responsible for choosing timezone and format based on users location..
         // date_default_timezone_set('UTC');
 
         // set current date if null, should be removed and set in client app
-        if ($model->date == null) {
-            $currentTime = new DateTime();
-            $model->date = $currentTime->format('Y-m-d H:i:s');
-        }
-
+        $exerciseId = $model->exercise->id;
         $stmt->bindParam(':createdByUserId', $model->createdByUserId);
-        $stmt->bindParam(':exerciseId', $model->exercise->id);
         $stmt->bindParam(':entryId', $model->entryId);
-        $stmt->bindParam(':weight', $model->weight);
-        $stmt->bindParam(':reps', $model->reps);
-        $stmt->bindParam(':sets', $model->sets);
-        $stmt->bindParam(':rest', $model->rest);
-        $stmt->bindParam(':date', $model->date);
-        $stmt->bindParam(':comment', $model->comment);
+        $stmt->bindParam(':exerciseId', $exerciseId);
 
         if ($stmt->execute()) {
             return true;

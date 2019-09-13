@@ -46,24 +46,20 @@ final class EntryDetail extends Base
     public static function Create(
         int $entryId,
         Exercise $exercise,
-        $weight,
-        $reps,
-        $rest,
-        $sets,
-        $date = null,
-        $comment
+        AppUser $user
     ) {
         $self = new self(
             null,
             $entryId,
             $exercise,
-            $weight,
-            $reps,
-            $rest,
-            $sets,
-            $date,
-            $comment
+            0,
+            0,
+            0,
+            0,
+            null,
+            ''
         );
+        $self->setCreatedByUser($user);
         return $self;
     }
 

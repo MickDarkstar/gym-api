@@ -2,11 +2,13 @@
 final class EntryController extends BaseController
 {
     private $service;
+    private $exerciseService;
 
     public function __construct()
     {
         parent::__construct();
         $this->service = new EntryRepository();
+        $this->exerciseService = new ExerciseService();
     }
 
     public static function New()
@@ -66,19 +68,27 @@ final class EntryController extends BaseController
 
     public function CreateEntryDetail()
     {
-        parent::Authorize();
+        $user = parent::Authorize();
         $data = parent::HttpRequestInput();
+        $exercise = $this->exerciseService->getById($data->exerciseId);
+        if ($exercise instanceof Exercise === false) {
+            echo Response::InternalServerError("Incorrect exercise id, it may have been removed", $exercise);
+            die();
+        }
+
+        $todaysEntry = $this->getOrCreateTodaysEntry($user);
+        if ($todaysEntry instanceof Entry === false) {
+            echo Response::InternalServerError("Error creating todays workout entry", $todaysEntry);
+            die();
+        }
 
         $model = EntryDetail::Create(
-            $data->entryId,
-            $data->exercise,
-            $data->weight,
-            $data->reps,
-            $data->sets,
-            $data->date,
-            $data->comment
+            $todaysEntry->id,
+            $exercise,
+            $user
         );
         $result = $this->service->createEntryDetail($model);
+
         echo ($result > 0) ?
             Response::Created("EntryDetail created", $result)
             : Response::Created("EntryDetail could not be created", $result);
@@ -136,5 +146,14 @@ final class EntryController extends BaseController
             echo ($result) ? Response::Ok("Deleted EntryDetail", $result)
                 : Response::InternalServerError("Could not delete EntryDetail", $result);
         }
+    }
+
+    private function getOrCreateTodaysEntry(AppUser $user)
+    {
+        $todaysEntry = $this->service->getTodaysEntry(parent::$currentUser);
+        if ($todaysEntry instanceof Entry === false) {
+            $todaysEntry = $this->service->createEntry($user);
+        }
+        return $todaysEntry;
     }
 }

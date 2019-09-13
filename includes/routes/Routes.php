@@ -4,12 +4,12 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-// Todo: proper router with less redundancy of code. Get rid of switch-cases and $httpRequest = $_SERVER['REQUEST_METHOD'];
-Route::set('index.php', function () {
+// Todo: proper Router with less redundancy of code. Get rid of switch-cases and $httpRequest = $_SERVER['REQUEST_METHOD'];
+Router::set('index.php', function () {
     IndexController::Home();
 });
 
-Route::set('users', function () {
+Router::set('users', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new UserController();
 
@@ -35,7 +35,7 @@ Route::set('users', function () {
     }
 });
 
-Route::set('login', function () {
+Router::set('login', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new UserController();
 
@@ -52,7 +52,7 @@ Route::set('login', function () {
     }
 });
 
-Route::set('exercises', function () {
+Router::set('exercises', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new ExerciseController();
 
@@ -79,7 +79,7 @@ Route::set('exercises', function () {
     }
 });
 
-Route::set('entrydetails', function () {
+Router::set('entrydetails', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new EntryController();
 
@@ -106,7 +106,7 @@ Route::set('entrydetails', function () {
     }
 });
 
-Route::set('entries', function () {
+Router::set('entries', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new EntryController();
     switch ($httpRequest) {
@@ -132,7 +132,7 @@ Route::set('entries', function () {
     }
 });
 
-Route::set('currententry', function () {
+Router::set('currententry', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new EntryController();
     switch ($httpRequest) {
