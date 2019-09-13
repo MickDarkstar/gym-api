@@ -85,26 +85,24 @@ final class EntryRepository extends BaseRepository
         return self::mapToEntries($rows);
     }
 
-    public function validateEntryDetail(EntryDetail $model)
+	/**
+	 * @return ValidationMessage
+	 */
+    public static function validateCreateEntryDetail(EntryDetail $model)
     {
+        $validationMessage = new ValidationMessage();
         if ($model->createdByUserId === null) {
-            http_response_code(400);
-            echo json_encode(array("message" => "CreatedByUserId is required to create entry. "));
-            return false;
+            $validationMessage->Invalid("createdByUserId", "CreatedByUserId is required to create entry. ");
         }
 
         if ($model->exercise->id === null) {
-            http_response_code(400);
-            echo json_encode(array("message" => "Exercise is required to create entry. "));
-            return false;
+            $validationMessage->Invalid("ExerciseId", "Exercise is required to create entry. ");
         }
 
         if ($model->entryId === null || $model->entryId === 0) {
-            http_response_code(400);
-            echo json_encode(array("message" => "EntryId is required to create entry detail. "));
-            return false;
+            $validationMessage->Invalid("EntryId", "EntryId is required to create entry detail. ");
         }
-        return true;
+        return $validationMessage;
     }
 
     public function createEntry(AppUser $user, $date = null)

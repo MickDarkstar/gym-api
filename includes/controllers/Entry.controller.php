@@ -71,14 +71,18 @@ final class EntryController extends BaseController
         $user = parent::Authorize();
         $data = parent::HttpRequestInput();
         $exercise = $this->exerciseService->getById($data->exerciseId);
+        if($exercise instanceof ValidationMessage){
+            echo Response::InternalServerError($exercise->getMessages());
+            die();
+        }
         if ($exercise instanceof Exercise === false) {
-            echo Response::InternalServerError("Incorrect exercise id, it may have been removed", $exercise);
+            echo Response::InternalServerError("Incorrect exercise id, it may have been removed");
             die();
         }
 
         $todaysEntry = $this->getOrCreateTodaysEntry($user);
         if ($todaysEntry instanceof Entry === false) {
-            echo Response::InternalServerError("Error creating todays workout entry", $todaysEntry);
+            echo Response::InternalServerError("Error creating todays workout entry");
             die();
         }
 
@@ -87,6 +91,13 @@ final class EntryController extends BaseController
             $exercise,
             $user
         );
+
+        $validation = EntryRepository::validateCreateEntryDetail($model);
+        if($validation->Ok() === false){
+            echo Response::Created("Invalid data: ", $validation->GetMessages());
+            die();
+        }
+
         $result = $this->service->createEntryDetail($model);
 
         echo ($result > 0) ?

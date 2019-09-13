@@ -80,6 +80,11 @@ final class ExerciseService
     public function getById(string $id)
     {
         $id = htmlspecialchars(strip_tags($id));
+        if($id > 0 === false || $id === "") {
+            $validation = new ValidationMessage();
+            $validation->invalid("ExerciseId", "Id of exercise must be a number");
+            return $validation;
+        }
         return $this->repository->getById($id);
     }
 
