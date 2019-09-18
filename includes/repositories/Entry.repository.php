@@ -11,6 +11,9 @@ final class EntryRepository extends BaseRepository
         $this->exerciseRepository = new ExerciseRepository();
     }
 
+    /**
+     * @return Entry
+     */
     protected function mapToEntry($row)
     {
         if ($row == null) {
@@ -27,6 +30,9 @@ final class EntryRepository extends BaseRepository
         return $model;
     }
 
+    /**
+     * @return Entry[]
+     */
     protected function mapToEntries($rows)
     {
         $models = [];
@@ -37,6 +43,9 @@ final class EntryRepository extends BaseRepository
         return $models;
     }
 
+    /**
+     * @return EntryDetail
+     */
     protected function mapToEntryDetail($row)
     {
         if ($row == null) {
@@ -57,6 +66,9 @@ final class EntryRepository extends BaseRepository
         return $entryDetail;
     }
 
+    /**
+     * @return EntryDetail[]
+     */
     protected function mapToEntryDetails($rows)
     {
         $entryDetails = [];
@@ -85,22 +97,22 @@ final class EntryRepository extends BaseRepository
         return self::mapToEntries($rows);
     }
 
-	/**
-	 * @return ValidationMessage
-	 */
+    /**
+     * @return ValidationMessage
+     */
     public static function validateCreateEntryDetail(EntryDetail $model)
     {
         $validationMessage = new ValidationMessage();
         if ($model->createdByUserId === null) {
-            $validationMessage->Invalid("createdByUserId", "CreatedByUserId is required to create entry. ");
+            $validationMessage->Add("createdByUserId", "CreatedByUserId is required to create entry. ");
         }
 
         if ($model->exercise->id === null) {
-            $validationMessage->Invalid("ExerciseId", "Exercise is required to create entry. ");
+            $validationMessage->Add("ExerciseId", "Exercise is required to create entry. ");
         }
 
         if ($model->entryId === null || $model->entryId === 0) {
-            $validationMessage->Invalid("EntryId", "EntryId is required to create entry detail. ");
+            $validationMessage->Add("EntryId", "EntryId is required to create entry detail. ");
         }
         return $validationMessage;
     }

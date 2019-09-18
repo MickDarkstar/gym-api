@@ -23,12 +23,12 @@ final class UserController extends BaseController
             $user = $this->service->getByEmail($data->email);
             $response = MiddleWare::VerifyPassword($data, $user);
             if ($response::$statusCode === 200) {
-                echo Response::Ok($response::$message, $response::$data);
+                echo ApiResponse::Ok($response::$message, $response::$data);
             } else {
-                echo Response::AccessDenied($response::$message);
+                echo ApiResponse::AccessDenied($response::$message);
             }
         } else {
-            echo Response::AccessDenied("Unsuccessful login: E-mail does not exist");
+            echo ApiResponse::AccessDenied("Unsuccessful login: E-mail does not exist");
         }
     }
 
@@ -37,7 +37,7 @@ final class UserController extends BaseController
         parent::Authorize();
 
         $result = $this->service->all();
-        echo Response::Ok("All users", $result);
+        echo ApiResponse::Ok("All users", $result);
     }
 
     public function NewUser()
@@ -51,10 +51,10 @@ final class UserController extends BaseController
             $data->password
         );
         if ($this->service->emailExists($user->email)) {
-            echo Response::Warning("E-mail is already in use");
+            echo ApiResponse::Warning("E-mail is already in use");
         } else {
             $result = $this->service->create($user);
-            echo Response::Created("Profile created", $result);
+            echo ApiResponse::Created("Profile created", $result);
         }
     }
 
@@ -71,10 +71,10 @@ final class UserController extends BaseController
         );
         $foundUser = $this->service->find($user->id);
         if ($this->service->emailExists($user->email) && $user->email !== $foundUser->email) {
-            echo Response::Warning("E-mail is already in use");
+            echo ApiResponse::Warning("E-mail is already in use");
         } else {
             $result = $this->service->update($user);
-            echo Response::Ok("Updated profile info", $result);
+            echo ApiResponse::Ok("Updated profile info", $result);
         }
     }
 }

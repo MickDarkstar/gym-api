@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ExerciseService
  *
@@ -20,47 +21,37 @@ final class ExerciseService
         $this->repository = $repository;
     }
 
-
-    public function validate(Exercise $exercise)
+    /**
+     * @return ValidationMessage
+     */
+    public static function validateCreateExercise(Exercise $model)
     {
-        // Todo: return ServiceMessage
-        if ($exercise->createdByUserId === null) {
-            http_response_code(400);
-            echo json_encode(array("message" => "CreatedByUserId is required to create exercise. "));
-            return false;
+        $validationMessage = new ValidationMessage();
+        if ($model->createdByUserId === null) {
+            $validationMessage->Add("Exercise", "CreatedByUserId is required to create entry. ");
         }
 
-        if ($exercise->name === null) {
-            http_response_code(400);
-            echo json_encode(array("message" => "Name is required to create exercise. "));
-            return false;
+        if ($model->name === null) {
+            $validationMessage->Add("Exercise", "Name is required to create Exercise. ");
         }
 
-        if ($exercise->type === null) {
-            http_response_code(400);
-            echo json_encode(array("message" => "Type is required to create exercise."));
-            return false;
-        }
-
-        // Not yet implemented
-        // if ($exercise->muscle === null) {
-        //     http_response_code(400);
-        //     echo json_encode(array("message" => "Muscle is required to create exercise."));
-        //     return false;
-        // }
-
-        if ($exercise->level === null || $exercise->level === "") {
-            http_response_code(400);
-            echo json_encode(array("message" => "Level is required to create exercise."));
-            return false;
-        }
-        return true;
+        return $validationMessage;
     }
-
 
     public function exerciseExist(int $id)
     {
         return $this->repository->exerciseExist($id);
+    }
+
+    public function getById($id)
+    {
+        $id = htmlspecialchars(strip_tags($id));
+        if ($id > 0 === false || $id === "") {
+            $validation = new ValidationMessage();
+            $validation->invalid("Exercise", "Invalid id");
+            return $validation;
+        }
+        return $this->repository->getById($id);
     }
 
     /**
@@ -77,20 +68,8 @@ final class ExerciseService
         return $this->repository->create($exercise);
     }
 
-    public function getById(string $id)
-    {
-        $id = htmlspecialchars(strip_tags($id));
-        if($id > 0 === false || $id === "") {
-            $validation = new ValidationMessage();
-            $validation->invalid("ExerciseId", "Id of exercise must be a number");
-            return $validation;
-        }
-        return $this->repository->getById($id);
-    }
-
     public function update(Exercise $exercise)
     {
-        // Todo: Validate updated fields
         $exercise = $this->sanitize($exercise);
         return $this->repository->update($exercise);
     }

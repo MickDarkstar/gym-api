@@ -4,7 +4,6 @@
  * Base short summary.
  *
  * Base class for controllers.
- * Unused as extending classes only has static members
  *
  * @version 1.0
  * @author Micke@tempory.org
@@ -19,11 +18,21 @@ class BaseController
     public function __construct()
     { }
 
+    protected static function HandleValidationErrors($serviceResponse)
+    {
+        if ($serviceResponse instanceof ValidationMessage) {
+            if ($serviceResponse->Invalid()) {
+                echo ApiResponse::InternalServerError($serviceResponse->GetMessages());
+                die();
+            }
+        }
+    }
+
     protected static function Authorize()
     {
         $response = MiddleWare::Authorize();
         if ($response::$statusCode === 401) {
-            echo Response::AccessDenied($response::$message . ". " . $response::$data);
+            echo ApiResponse::AccessDenied($response::$message . ". " . $response::$data);
             die;
         } else {
             self::$currentUser = new AppUser(

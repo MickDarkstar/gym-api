@@ -16,12 +16,12 @@ final class EntryController extends BaseController
         return new self;
     }
 
-    public function All()
+    public function AllEntries()
     {
         parent::Authorize();
 
         $result = $this->service->getEntriesByUser(parent::$currentUser);
-        echo Response::Ok("All Entries", $result);
+        echo ApiResponse::Ok("All Entries", $result);
     }
 
     public function Current()
@@ -32,10 +32,10 @@ final class EntryController extends BaseController
         if ($currentEntry == null) {
             $currentEntry = $this->service->createEntry(parent::$currentUser);
             if ($currentEntry instanceof Entry == false) {
-                echo Response::InternalServerError("Could not get or create todays entry", $currentEntry);
+                echo ApiResponse::InternalServerError("Could not get or create todays entry", $currentEntry);
             }
         }
-        echo Response::Ok("Current entry", $currentEntry);
+        echo ApiResponse::Ok("Current entry", $currentEntry);
     }
 
     public function CreateEntry()
@@ -43,9 +43,9 @@ final class EntryController extends BaseController
         parent::Authorize();
 
         $result = $this->service->createEntry(parent::$currentUser);
-        echo ($result > 0) ?
-            Response::Created("Entry created", $result)
-            : Response::Created("Entry could not be created", $result);
+        echo ($result > 0)
+            ? ApiResponse::Created("Entry created", $result)
+            : ApiResponse::Created("Entry could not be created", $result);
     }
 
     public function UpdateEntry()
@@ -55,14 +55,14 @@ final class EntryController extends BaseController
         $data = parent::HttpRequestInput();
         $model = $this->service->getById($data->id);
         if ($model === null) {
-            echo Response::Warning("Entry does not exist");
+            echo ApiResponse::Warning("Entry does not exist");
         } else {
             $model->Update(
                 $data->comment
             );
             $result = $this->service->updateEntry($model);
 
-            echo ($result) ? Response::Ok("Updated Entry info", $result) : Response::Ok("Could not update Entry info", $result);
+            echo ($result) ? ApiResponse::Ok("Updated Entry info", $result) : ApiResponse::Ok("Could not update Entry info", $result);
         }
     }
 
@@ -70,39 +70,35 @@ final class EntryController extends BaseController
     {
         $user = parent::Authorize();
         $data = parent::HttpRequestInput();
-        $exercise = $this->exerciseService->getById($data->exerciseId);
-        if($exercise instanceof ValidationMessage){
-            echo Response::InternalServerError($exercise->getMessages());
-            die();
-        }
-        if ($exercise instanceof Exercise === false) {
-            echo Response::InternalServerError("Incorrect exercise id, it may have been removed");
+
+        $exerciseResponse = $this->exerciseService->getById($data->exerciseId);
+        parent::HandleValidationErrors($exerciseResponse);
+
+        if ($exerciseResponse instanceof Exercise === false) {
+            echo ApiResponse::InternalServerError("Incorrect exercise id, it may have been removed");
             die();
         }
 
         $todaysEntry = $this->getOrCreateTodaysEntry($user);
         if ($todaysEntry instanceof Entry === false) {
-            echo Response::InternalServerError("Error creating todays workout entry");
+            echo ApiResponse::InternalServerError("Error creating todays workout entry");
             die();
         }
 
         $model = EntryDetail::Create(
             $todaysEntry->id,
-            $exercise,
+            $exerciseResponse,
             $user
         );
 
         $validation = EntryRepository::validateCreateEntryDetail($model);
-        if($validation->Ok() === false){
-            echo Response::Created("Invalid data: ", $validation->GetMessages());
-            die();
-        }
+        parent::HandleValidationErrors($validation);
 
         $result = $this->service->createEntryDetail($model);
 
-        echo ($result > 0) ?
-            Response::Created("EntryDetail created", $result)
-            : Response::Created("EntryDetail could not be created", $result);
+        echo ($result > 0)
+            ? ApiResponse::Created("EntryDetail created", $result)
+            : ApiResponse::Created("EntryDetail could not be created", $result);
     }
 
     public function UpdateEntryDetail()
@@ -112,7 +108,7 @@ final class EntryController extends BaseController
         $data = parent::HttpRequestInput();
         $model = $this->service->getById($data->id);
         if ($model === null) {
-            echo Response::Warning("Entry does not exist");
+            echo ApiResponse::Warning("Entry does not exist");
         } else if ($model instanceof EntryDetail) {
             $model->Update(
                 $data->entryId,
@@ -125,7 +121,9 @@ final class EntryController extends BaseController
             );
             $result = $this->service->updateEntryDetail($model);
 
-            echo ($result) ? Response::Ok("Updated Entry info", $result) : Response::InternalServerError("Could not update Entry info", $result);
+            echo ($result)
+                ? ApiResponse::Ok("Updated Entry info", $result)
+                : ApiResponse::InternalServerError("Could not update Entry info", $result);
         }
     }
 
@@ -136,11 +134,12 @@ final class EntryController extends BaseController
         $data = parent::HttpRequestInput();
         $model = $this->service->getEntryById($data->id);
         if ($model instanceof Entry == false) {
-            echo Response::InternalServerError("Entry does not exist, can´t delete");
+            echo ApiResponse::InternalServerError("Entry does not exist, can´t delete");
         } else {
             $result = $this->service->deleteEntry($model);
-            echo ($result) ? Response::Ok("Deleted Entry", $result)
-                : Response::InternalServerError("Could not delete Entry", $result);
+            echo ($result)
+                ? ApiResponse::Ok("Deleted Entry", $result)
+                : ApiResponse::InternalServerError("Could not delete Entry", $result);
         }
     }
 
@@ -151,11 +150,11 @@ final class EntryController extends BaseController
         $data = parent::HttpRequestInput();
         $model = $this->service->getEntryDetailById($data->id);
         if ($model instanceof EntryDetail == false) {
-            echo Response::InternalServerError("EntryDetail does not exist, can´t delete");
+            echo ApiResponse::InternalServerError("EntryDetail does not exist, can´t delete");
         } else {
             $result = $this->service->deleteEntryDetail($model);
-            echo ($result) ? Response::Ok("Deleted EntryDetail", $result)
-                : Response::InternalServerError("Could not delete EntryDetail", $result);
+            echo ($result) ? ApiResponse::Ok("Deleted EntryDetail", $result)
+                : ApiResponse::InternalServerError("Could not delete EntryDetail", $result);
         }
     }
 

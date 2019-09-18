@@ -5,6 +5,6 @@ final class IndexController extends BaseController
     {
         $currentUser = parent::Authorize();
         // Example, use parents or returned user
-        echo Response::OK("This is home for: " . parent::$currentUser->firstname . " " . $currentUser->lastname);
+        echo ApiResponse::OK("This is home for: " . parent::$currentUser->firstname . " " . $currentUser->lastname);
     }
 }

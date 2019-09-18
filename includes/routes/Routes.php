@@ -15,7 +15,7 @@ Router::set('users', function () {
 
     switch ($httpRequest) {
         case 'OPTIONS':
-            echo Response::OK("Preflight OK!");
+            echo ApiResponse::OK("Preflight OK!");
             break;
         case 'GET':
             $controller->AllUsers();
@@ -30,7 +30,7 @@ Router::set('users', function () {
             break;
 
         default:
-            echo Response::MethodNotAllowed();
+            echo ApiResponse::MethodNotAllowed();
             break;
     }
 });
@@ -41,13 +41,13 @@ Router::set('login', function () {
 
     switch ($httpRequest) {
         case 'OPTIONS':
-            echo Response::OK("Preflight OK!");
+            echo ApiResponse::OK("Preflight OK!");
             break;
         case 'POST':
             $controller->Login();
             break;
         default:
-            echo Response::MethodNotAllowed();
+            echo ApiResponse::MethodNotAllowed();
             break;
     }
 });
@@ -58,7 +58,7 @@ Router::set('exercises', function () {
 
     switch ($httpRequest) {
         case 'OPTIONS':
-            echo Response::OK("Preflight OK!");
+            echo ApiResponse::OK("Preflight OK!");
             break;
         case 'GET':
             $controller->All();
@@ -74,34 +74,7 @@ Router::set('exercises', function () {
             break;
 
         default:
-            echo Response::MethodNotAllowed();
-            break;
-    }
-});
-
-Router::set('entrydetails', function () {
-    $httpRequest = $_SERVER['REQUEST_METHOD'];
-    $controller = new EntryController();
-
-    switch ($httpRequest) {
-        case 'OPTIONS':
-            echo Response::OK("Preflight OK!");
-            break;
-        case 'GET':
-            $controller->All();
-            break;
-        case 'POST':
-            $controller->CreateEntryDetail();
-            break;
-        case 'PUT':
-            $controller->UpdateEntryDetail();
-            break;
-        case 'DELETE':
-            $controller->DeleteEntryDetail();
-            break;
-
-        default:
-            echo Response::MethodNotAllowed();
+            echo ApiResponse::MethodNotAllowed();
             break;
     }
 });
@@ -111,10 +84,10 @@ Router::set('entries', function () {
     $controller = new EntryController();
     switch ($httpRequest) {
         case 'OPTIONS':
-            echo Response::OK("Preflight OK!");
+            echo ApiResponse::OK("Preflight OK!");
             break;
         case 'GET':
-            $controller->All();
+            $controller->AllEntries();
             break;
         case 'POST':
             $controller->CreateEntry();
@@ -127,7 +100,34 @@ Router::set('entries', function () {
             break;
 
         default:
-            echo Response::MethodNotAllowed();
+            echo ApiResponse::MethodNotAllowed();
+            break;
+    }
+});
+
+Router::set('entrydetails', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new EntryController();
+
+    switch ($httpRequest) {
+        case 'OPTIONS':
+            echo ApiResponse::OK("Preflight OK!");
+            break;
+        case 'GET':
+            $controller->AllEntries();
+            break;
+        case 'POST':
+            $controller->CreateEntryDetail();
+            break;
+        case 'PUT':
+            $controller->UpdateEntryDetail();
+            break;
+        case 'DELETE':
+            $controller->DeleteEntryDetail();
+            break;
+
+        default:
+            echo ApiResponse::MethodNotAllowed();
             break;
     }
 });
@@ -137,14 +137,14 @@ Router::set('currententry', function () {
     $controller = new EntryController();
     switch ($httpRequest) {
         case 'OPTIONS':
-            echo Response::OK("Preflight OK!");
+            echo ApiResponse::OK("Preflight OK!");
             break;
         case 'GET':
             $controller->Current();
             break;
 
         default:
-            echo Response::MethodNotAllowed();
+            echo ApiResponse::MethodNotAllowed();
             break;
     }
 });

@@ -18,7 +18,7 @@ class BaseRepository
       $this::$dbHandle = $pdo;
   }
 
-  protected static function mapHistoricalData($model, $row)
+  protected static function mapHistoricalData(Base $model, $row)
   {
     $model->setCreatedByUserId($row['createdByUserId']);
     $model->created = $row['created'];

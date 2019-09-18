@@ -13,6 +13,7 @@ class MiddleWareMessage
         self::$data = $data;
     }
 
+    // Todo: rework, use constructor instead. This is uneccessary
     public static function Get($statusCode, $message = "Login failed. Wrong password", $data = null)
     {
         return new self($statusCode, $message, $data);

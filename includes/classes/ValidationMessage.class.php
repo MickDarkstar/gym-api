@@ -1,20 +1,25 @@
 <?php
 
-class ValidationMessage
+final class ValidationMessage
 {
-    public $invalid = array();
+    private $invalid = array();
 
-    public function invalid($property, $message)
+    public function Add($property, $message)
     {
         array_push($this->invalid, array($property => $message));
     }
 
-    public function ok()
+    public function Ok()
     {
         return empty($this->invalid);
     }
 
-    public function getMessages()
+    public function Invalid()
+    {
+        return $this->Ok() == false;
+    }
+
+    public function GetMessages()
     {
         return $this->invalid;
     }

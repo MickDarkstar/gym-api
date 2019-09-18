@@ -67,7 +67,6 @@ final class ExerciseRepository extends BaseRepository
         return true;
     }
 
-
     public function exerciseExist(int $id)
     {
         $query = "SELECT id password
