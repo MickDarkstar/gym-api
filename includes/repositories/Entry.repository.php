@@ -274,7 +274,8 @@ final class EntryRepository extends BaseRepository
                 reps = :reps,
                 sets = :sets,
                 rest = :rest,
-                comment = :comment
+                comment = :comment,
+                modifiedByUserId = :modifiedByUserId 
             WHERE id = :id";
 
         $stmt = self::$dbHandle->prepare($query);
@@ -287,6 +288,7 @@ final class EntryRepository extends BaseRepository
         $stmt->bindParam(':rest', $model->rest);
         $stmt->bindParam(':comment', $model->comment);
 
+        $stmt->bindParam(':modifiedByUserId', $model->modifiedByUserId);
         $stmt->bindParam(':id', $model->id);
 
         if ($stmt->execute()) {

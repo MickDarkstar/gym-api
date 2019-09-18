@@ -41,7 +41,7 @@ final class EntryController extends BaseController
     public function CreateEntry()
     {
         parent::Authorize();
-
+        // Unused, maybe implement when supporting more than one entry per date
         $result = $this->service->createEntry(parent::$currentUser);
         echo ($result > 0)
             ? ApiResponse::Created("Entry created", $result)
@@ -103,20 +103,19 @@ final class EntryController extends BaseController
 
     public function UpdateEntryDetail()
     {
-        parent::Authorize();
+        $currentUser = parent::Authorize();
 
         $data = parent::HttpRequestInput();
-        $model = $this->service->getById($data->id);
+        $model = $this->service->getEntryDetailById($data->id);
         if ($model === null) {
             echo ApiResponse::Warning("Entry does not exist");
         } else if ($model instanceof EntryDetail) {
             $model->Update(
-                $data->entryId,
-                $data->exercise,
+                $currentUser,
                 $data->weight,
                 $data->reps,
+                $data->rest,
                 $data->sets,
-                $data->date,
                 $data->comment
             );
             $result = $this->service->updateEntryDetail($model);

@@ -1,12 +1,13 @@
 
 <?php
-//** Used as standard-response for all requests */
+//** Used as a generic api response for all requests */
 final class ApiResponse
 {
     public $message;
     public $data;
-    
-    private function __construct($message = null, $data = null) {
+
+    private function __construct($message = null, $data = null)
+    {
         $this->message = $message;
         $this->data = $data;
     }

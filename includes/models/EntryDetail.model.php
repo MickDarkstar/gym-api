@@ -64,20 +64,18 @@ final class EntryDetail extends Base
     }
 
     public function Update(
-        Exercise $exercise,
+        AppUser $user,
         $weight,
         $reps,
         $rest,
         $sets,
-        $date = null,
         $comment
     ) {
-        $this->exercise = $exercise;
         $this->weight   = $weight;
         $this->reps     = $reps;
         $this->rest     = $rest;
         $this->sets     = $sets;
-        $this->date     = $date;
         $this->comment  = $comment;
+        $this->setModifiedByUser($user);
     }
 }
