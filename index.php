@@ -1,13 +1,16 @@
 <?php
-// TODO: show error reporting (for debugging)
-error_reporting(E_ALL);
+
+include('./config.php');
+if ($_SERVER['HTTP_HOST'] === 'localhost') {
+    // TODO: show error reporting (for debugging)
+    error_reporting(E_ALL);
+    Config::$mode = 'dev';
+}
 
 // set your default time-zone
 date_default_timezone_set('Europe/Stockholm');
 
 include_once './includes/fire-base-lib.php';
-
-include('./config.php');
 
 /*
  * By including ./includes/autoloader.php we require_once all the needed
@@ -21,4 +24,4 @@ include('./includes/autoloader.php');
  * all of the valid routes for our app and point each route 
  * to a specifik *Controller and method in that controller
 */
-require_once( './includes/routing/Routes.php' );
+require_once('./includes/routing/Routes.php');
