@@ -1,0 +1,6 @@
+{
+    "dsn": "mysql:host=brothersofmetal.net.mysql;",
+    "username": "brotkersofmetal",
+    "password": "vsyZdRu9",
+    "dbname": "brotkersofmetal"
+}
