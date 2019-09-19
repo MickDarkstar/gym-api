@@ -1,7 +1,0 @@
-{
-    "secretkey": "metalinthenight",
-    "iss": "http://www.brothersofmetal.net",
-    "aud": "http://www.brothersofmetal.net",
-    "iat": 1356999524,
-    "nbf": 1357000000
-}
