@@ -1,7 +1,7 @@
 <?php
 final class ExerciseRepository extends BaseRepository
 {
-    const DB_TABLE = "gym-exercise";
+    const DB_TABLE = "gym_exercise";
 
     public function __construct(PDO $pdo = null)
     {
@@ -196,7 +196,6 @@ final class ExerciseRepository extends BaseRepository
         $stmt->execute();
 
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         return self::mapToModels($rows);
     }
 

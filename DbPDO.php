@@ -10,18 +10,17 @@ class DbPDO extends PDO
 {
     private static $_instance;
     protected $_dsn;
-    protected $_dbname;
     protected $_password;
     protected $_username;
 
     public function __construct()
     {
+        Config::GetBaseLine();
         if (!self::$_instance) {
             try {
-                $this->_dbname = Config::Get('database')->dbname;
+                $this->_dsn      = Config::Get('database')->dsn . "dbname=" .  Config::Get('database')->dbname . ";";
                 $this->_username = Config::Get('database')->username;
                 $this->_password = Config::Get('database')->password;
-                $this->_dsn = Config::Get('database')->dsn;
 
                 self::$_instance = parent::__construct(
                     $this->_dsn,

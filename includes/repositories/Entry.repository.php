@@ -2,8 +2,8 @@
 final class EntryRepository extends BaseRepository
 {
     private $exerciseRepository;
-    const TABLE_ENTRY = "gym-entry";
-    const TABLE_ENTRY_DETAIL = "gym-entry_detail";
+    const TABLE_ENTRY = "gym_entry";
+    const TABLE_ENTRY_DETAIL = "gym_entry_detail";
 
     public function __construct(PDO $pdo = null)
     {

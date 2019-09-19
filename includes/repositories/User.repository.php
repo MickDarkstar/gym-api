@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * @version 2.0
@@ -7,7 +6,7 @@
  */
 final class UserRepository extends BaseRepository
 {
-    const DB_TABLE = "gym-users";
+    const DB_TABLE = "gym_users";
 
     public function __construct(PDO $pdo = null)
     {
@@ -16,12 +15,8 @@ final class UserRepository extends BaseRepository
 
     public function all()
     {
-        $list = [];
         $req = self::$dbHandle->query("SELECT * FROM `" . self::DB_TABLE . "` ORDER BY created");
         $req->execute();
-        // foreach ($req->fetchAll() as $result) {
-        //     $list[] = self::mapToObject($result);
-        // }
         $result = $req->fetchAll();
         $list[] = self::mapToObjects($result);
         return $list;
