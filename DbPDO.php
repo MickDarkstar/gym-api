@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DbPDO extension of PDO
  * Class for db connection
@@ -14,25 +15,28 @@ class DbPDO extends PDO
     protected $_username;
 
     public function __construct()
-	{
-		if(!self::$_instance)
-		{
-            try
-			{
+    {
+        if (!self::$_instance) {
+            try {
                 include('DBSettings.php');
-                $this->_dbname = $_dbname;
-                $this->_username = $_username;
-                $this->_dsn .= 'dbname='.$this->_dbname;
-                self::$_instance = parent::__construct($this->_dsn,$this->_username,$this->_password,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
-            }
-			catch (PDOException $e)
-			{
+                $this->_dbname = Config::Get('database')->dbname;
+                $this->_username = Config::Get('database')->username;
+                $this->_password = Config::Get('database')->password;
+                $this->_dsn .= 'dbname=' . $this->_dbname;
+
+                self::$_instance = parent::__construct(
+                    $this->_dsn,
+                    $this->_username,
+                    $this->_password,
+                    array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+                );
+            } catch (PDOException $e) {
                 echo 'Connection failed: ' . $e->getMessage();
             }
         }
         return self::$_instance;
     }
-    
+
     public static function getInstance()
     {
         if (!self::$_instance) {

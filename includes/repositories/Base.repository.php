@@ -13,7 +13,7 @@ class BaseRepository
   public function __construct(PDO $pdo = null)
   {
     if ($pdo == null)
-      $this::$dbHandle = dbPDO::getInstance();
+      $this::$dbHandle = DbPDO::getInstance();
     else
       $this::$dbHandle = $pdo;
   }
