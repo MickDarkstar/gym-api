@@ -1,9 +1,12 @@
 <?php
+require_once( './includes/routing/Router.php' );
+
 header("Access-Control-Allow-Origin: http://localhost:4200");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
 // Todo: proper Router with less redundancy of code. Get rid of switch-cases and $httpRequest = $_SERVER['REQUEST_METHOD'];
 Router::set('index.php', function () {
     IndexController::Home();

@@ -61,6 +61,11 @@ function createPath($pathArray, $endingDirectorySeparator = true)
     return $path;
 }
 
+function loadMiddleWare($fileName)
+{
+    load($fileName, 'middleware');
+}
+
 function loadClasses($fileName)
 {
     load($fileName, 'classes');
@@ -91,6 +96,8 @@ function loadServices($fileName)
 }
 
 spl_autoload_register('loadControllers');
+spl_autoload_register('loadMiddleWare');
+
 spl_autoload_register('loadClasses');
 spl_autoload_register('loadRepositories');
 spl_autoload_register('loadServices');
