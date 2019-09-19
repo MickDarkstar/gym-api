@@ -1,6 +1,4 @@
 <?php
-include_once 'MiddleWare.settings.php';
-
 use \Firebase\JWT\JWT;
 
 /**
@@ -12,12 +10,13 @@ class MiddleWare
 {
     public static function VerifyPassword($data, AppUser $user)
     {
+        Config::GetBaseLine();
         if (password_verify($data->password, $user->password)) {
             $token = array(
-                "iss" => ISS,
-                "aud" => AUD,
-                "iat" => IAT,
-                "nbf" => NBF,
+                "iss" => Config::Get('middleware')->iss,
+                "aud" => Config::Get('middleware')->aud,
+                "iat" => Config::Get('middleware')->iat,
+                "nbf" => Config::Get('middleware')->nbf,
                 "data" => array(
                     "id" => $user->id,
                     "firstname" => $user->firstname,
@@ -25,13 +24,13 @@ class MiddleWare
                     "email" => $user->email
                 )
             );
-            $jwt = JWT::encode($token, SECRET_KEY);
+            $jwt = JWT::encode($token, Config::Get('middleware')->secretkey);
             return MiddleWareMessage::Get(
                 200,
                 "Access granted",
                 array(
                     "jwt" => $jwt,
-                    "expiresIn" => NBF,
+                    "expiresIn" => Config::Get('middleware')->nbf,
                     "user" => array(
                         "id" => $user->id,
                         "firstname" => $user->firstname,
@@ -41,7 +40,7 @@ class MiddleWare
                 )
             );
         } else {
-            return MiddleWareMessage::Get(401, "Login failed. Wrong password", "datta");
+            return MiddleWareMessage::Get(401, "Login failed. Wrong password");
         }
     }
 
@@ -50,16 +49,17 @@ class MiddleWare
      */
     public static function Authorize()
     {
+        Config::GetBaseLine();
         $headers = apache_request_headers();
         if (isset($headers['Authorization']) == false) {
             return MiddleWareMessage::Get(401, "Access denied. Auth-header not set");
             exit;
         }
-        $TOKEN = $headers['Authorization'];
-        if ($TOKEN) {
+        $token = $headers['Authorization'];
+        if ($token) {
             try {
-                $token = JWT::decode($TOKEN, SECRET_KEY, array('HS256'));
-                return MiddleWareMessage::Get(200, "Access granted", $token);
+                $decodedToken = JWT::decode($token, Config::Get('middleware')->secretkey, array('HS256'));
+                return MiddleWareMessage::Get(200, "Access granted", $decodedToken);
             } catch (Exception $e) {
                 return MiddleWareMessage::Get(401, "Access denied. Invalid token", $e->getMessage());
             }
