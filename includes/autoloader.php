@@ -15,7 +15,6 @@
 
 define('DEFAULT_DELIMITER', '.php');
 define('CLASS_DELIMITER', '.class.php');
-define('DTO_DELIMITER', '.dto.php');
 define('MODEL_DELIMITER', '.model.php');
 define('CONTROLLER_DELIMITER', '.controller.php');
 define('SERVICE_DELIMITIER', '.service.php');
@@ -28,8 +27,6 @@ function determineDelimiter($folderName)
     switch ($folderName) {
         case 'classes':
             return CLASS_DELIMITER;
-        case 'DTOs':
-            return DTO_DELIMITER;
         case 'models':
             return MODEL_DELIMITER;
         case 'controllers':
@@ -69,13 +66,6 @@ function loadClasses($fileName)
     load($fileName, 'classes');
 }
 
-function loadDTOs($fileName)
-{
-    $fileName = str_replace("DTO", "", $fileName);
-
-    load($fileName, 'dtos');
-}
-
 function loadControllers($fileName)
 {
     $fileName = str_replace("Controller", "", $fileName);
@@ -102,7 +92,6 @@ function loadServices($fileName)
 
 spl_autoload_register('loadControllers');
 spl_autoload_register('loadClasses');
-spl_autoload_register('loadDTOs');
 spl_autoload_register('loadRepositories');
 spl_autoload_register('loadServices');
 spl_autoload_register('loadModels');

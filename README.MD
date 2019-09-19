@@ -1,6 +1,14 @@
 # jwt-REST-API
 PHP Boilerplate REST-API with jwt token authentication 
 
+*** Naming conventions ***
+-- ClassName
+-- IInterfaceName
+-- methodName
+-- StaticMethodName
+-- propertyName
+-- $variableName
+
 *** Arkitektur ***
 -- OOP och multitier architecture (fyra lager där middleware användas före och efter lager beroende på syfte)
 -- *Konstanter*: läggs i /includes/Constants.php, MiddleWare har dock en constant i MiddleWare.settings.php som bör ses över.
