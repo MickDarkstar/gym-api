@@ -1,7 +1,7 @@
 <?php
 class Config
 {
-    private static $mode = 'live';
+    private static $mode = 'dev';
     private static $loadedConfigs = array();
     private static $configLocation = 'config/';
     private static $configConfiged = false;
