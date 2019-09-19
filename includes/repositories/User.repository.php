@@ -7,7 +7,7 @@
  */
 final class UserRepository extends BaseRepository
 {
-    const DB_TABLE = "users";
+    const DB_TABLE = "gym-users";
 
     public function __construct(PDO $pdo = null)
     {

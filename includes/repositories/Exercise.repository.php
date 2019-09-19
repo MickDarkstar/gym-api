@@ -1,7 +1,7 @@
 <?php
 final class ExerciseRepository extends BaseRepository
 {
-    const DB_TABLE = "exercise";
+    const DB_TABLE = "gym-exercise";
 
     public function __construct(PDO $pdo = null)
     {
