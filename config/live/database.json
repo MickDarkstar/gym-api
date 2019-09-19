@@ -1,5 +1,6 @@
 {
-    "username": "localhost",
-    "password": "",
-    "dbname": "gym-logger"
+    "dsn": "mysql:host=brothersofmetal.net.mysql;",
+    "username": "brotkersofmetal",
+    "password": "vsyZdRu9",
+    "dbname": "brotkersofmetal"
 }

@@ -9,7 +9,7 @@
 class DbPDO extends PDO
 {
     private static $_instance;
-    protected $_dsn = 'mysql:host=localhost;';
+    protected $_dsn;
     protected $_dbname;
     protected $_password;
     protected $_username;
@@ -18,11 +18,10 @@ class DbPDO extends PDO
     {
         if (!self::$_instance) {
             try {
-                include('DBSettings.php');
                 $this->_dbname = Config::Get('database')->dbname;
                 $this->_username = Config::Get('database')->username;
                 $this->_password = Config::Get('database')->password;
-                $this->_dsn .= 'dbname=' . $this->_dbname;
+                $this->_dsn = Config::Get('database')->dsn;
 
                 self::$_instance = parent::__construct(
                     $this->_dsn,
