@@ -1,4 +1,5 @@
 <?php
+
 use \Firebase\JWT\JWT;
 
 /**
@@ -48,18 +49,22 @@ class MiddleWare
      */
     public static function Authorize()
     {
-        $headers = apache_request_headers();
-        if (isset($headers['Authorization']) == false) {
-            return MiddleWareMessage::Get(401, "Access denied. Auth-header not set");
-            exit;
+        $headers = null;
+        if (function_exists("apache_request_headers")) {
+            $headers = apache_request_headers();
+            if (isset($headers['Authorization-Token']) == false) {
+                return MiddleWareMessage::Get(401, "Access denied. Auth-header not set or apache_request_headers not supported");
+                exit;
+            }
         }
-        $token = $headers['Authorization'];
+
+        $token = $headers['Authorization-Token'];
         if ($token) {
             try {
                 $decodedToken = JWT::decode($token, Config::Get('middleware')->secretkey, array('HS256'));
                 return MiddleWareMessage::Get(200, "Access granted", $decodedToken);
             } catch (Exception $e) {
-                return MiddleWareMessage::Get(401, "Access denied. Invalid token", $e->getMessage());
+                return MiddleWareMessage::Get(401, "Access denied. Invalid token: ", $e->getMessage());
             }
         } else {
             return MiddleWareMessage::Get(401, "Access denied. Token not set.");
