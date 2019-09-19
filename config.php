@@ -6,7 +6,7 @@ class Config
     private static $configLocation = 'config/';
     private static $configConfiged = false;
 
-    static function GetBaseLine()
+    private static function GetBaseLine()
     {
         if (!self::$configConfiged) {
             self::$mode = (getenv('mode'))

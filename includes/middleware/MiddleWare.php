@@ -10,7 +10,6 @@ class MiddleWare
 {
     public static function VerifyPassword($data, AppUser $user)
     {
-        Config::GetBaseLine();
         if (password_verify($data->password, $user->password)) {
             $token = array(
                 "iss" => Config::Get('middleware')->iss,
@@ -49,7 +48,6 @@ class MiddleWare
      */
     public static function Authorize()
     {
-        Config::GetBaseLine();
         $headers = apache_request_headers();
         if (isset($headers['Authorization']) == false) {
             return MiddleWareMessage::Get(401, "Access denied. Auth-header not set");

@@ -15,7 +15,6 @@ class DbPDO extends PDO
 
     public function __construct()
     {
-        Config::GetBaseLine();
         if (!self::$_instance) {
             try {
                 $this->_dsn      = Config::Get('database')->dsn . "dbname=" .  Config::Get('database')->dbname . ";";
