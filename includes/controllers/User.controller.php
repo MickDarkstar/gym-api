@@ -54,6 +54,10 @@ final class UserController extends BaseController
             echo ApiResponse::Warning("E-mail is already in use");
         } else {
             $result = $this->service->create($user);
+            if ($result instanceof AppUser == false) {
+                echo ApiResponse::InternalServerError("Could not create user, pls try again or contact support");
+                exit();
+            }
             echo ApiResponse::Created("Profile created", $result);
         }
     }
