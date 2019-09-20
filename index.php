@@ -28,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     //     header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
      http_response_code(200);
      echo "Preflight OK!";
+     exit;
+     // Inspiration https://www.dinochiesa.net/?p=754
 }
 
 // set your default time-zone
