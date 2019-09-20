@@ -1,0 +1,10 @@
+        // Todo: Move this redudant code to BaseRepo as a method. PrepareQueryById($id) => $row;
+        $stmt = self::$dbHandle->prepare($query);
+
+        $id = htmlspecialchars(strip_tags($id));
+
+        $stmt->bindParam(1, $id);
+
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
