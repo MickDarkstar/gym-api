@@ -33,6 +33,7 @@ final class EntryController extends BaseController
             $currentEntry = $this->service->createEntry(parent::$currentUser);
             if ($currentEntry instanceof Entry == false) {
                 echo ApiResponse::InternalServerError("Could not get or create todays entry", $currentEntry);
+                exit();
             }
         }
         echo ApiResponse::Ok("Current entry", $currentEntry);

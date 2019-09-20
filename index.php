@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
      // Inspiration https://www.dinochiesa.net/?p=754
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT' || $_SERVER['REQUEST_METHOD'] == 'PATCH') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT' || $_SERVER['REQUEST_METHOD'] == 'PATCH' || $_SERVER['REQUEST_METHOD'] == 'GET') {
     header("Content-Type: application/json; charset=UTF-8");
 }
 

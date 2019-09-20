@@ -154,7 +154,6 @@ final class EntryRepository extends BaseRepository
         // Should be default date for server, client should be responsible for choosing timezone and format based on users location..
         // date_default_timezone_set('UTC');
 
-        // set current date if null, should be removed and set in client app
         $exerciseId = $model->exercise->id;
         $stmt->bindParam(':createdByUserId', $model->createdByUserId);
         $stmt->bindParam(':entryId', $model->entryId);
