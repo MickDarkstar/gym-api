@@ -1,6 +1,7 @@
 <?php
 require_once('./includes/routing/Router.php');
 // Todo: proper Router with less redundancy of code. Get rid of switch-cases and get following method once: $httpRequest = $_SERVER['REQUEST_METHOD'];
+// Would rather pass request_method from index then setting a global variable..
 Router::set('index.php', function () {
     IndexController::Home();
 });
@@ -10,9 +11,6 @@ Router::set('users', function () {
     $controller = new UserController();
 
     switch ($httpRequest) {
-        case 'OPTIONS':
-            echo ApiResponse::OK("Preflight OK!");
-            break;
         case 'GET':
             $controller->AllUsers();
             break;
@@ -36,9 +34,6 @@ Router::set('login', function () {
     $controller = new UserController();
 
     switch ($httpRequest) {
-        case 'OPTIONS':
-            echo ApiResponse::OK("Preflight OK!");
-            break;
         case 'POST':
             $controller->Login();
             break;
@@ -53,9 +48,6 @@ Router::set('exercises', function () {
     $controller = new ExerciseController();
 
     switch ($httpRequest) {
-        case 'OPTIONS':
-            echo ApiResponse::OK("Preflight OK!");
-            break;
         case 'GET':
             $controller->All();
             break;
@@ -79,9 +71,6 @@ Router::set('entries', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new EntryController();
     switch ($httpRequest) {
-        case 'OPTIONS':
-            echo ApiResponse::OK("Preflight OK!");
-            break;
         case 'GET':
             $controller->AllEntries();
             break;
@@ -106,9 +95,6 @@ Router::set('entrydetails', function () {
     $controller = new EntryController();
 
     switch ($httpRequest) {
-        case 'OPTIONS':
-            echo ApiResponse::OK("Preflight OK!");
-            break;
         case 'GET':
             $controller->AllEntries();
             break;
@@ -132,13 +118,9 @@ Router::set('currententry', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new EntryController();
     switch ($httpRequest) {
-        case 'OPTIONS':
-            echo ApiResponse::OK("Preflight OK!");
-            break;
         case 'GET':
             $controller->Current();
             break;
-
         default:
             echo ApiResponse::MethodNotAllowed();
             break;

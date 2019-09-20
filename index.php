@@ -6,17 +6,30 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
     error_reporting(E_ALL);
     Config::$mode = 'dev';
 }
-// Todo: set origin with Config::Get('ACL')->origin
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization-Token");
-header('Access-Control-Allow-Credentials: true');
 
-header('Cache-Control: no-cache');
+/*
+ *
+ *
+ * Move this to CORS.handler.php
+ * 
+*/
+ 
+// Allow from any origin
+// if (isset($_SERVER['HTTP_ORIGIN'])) {
+//     // should do a check here to match $_SERVER['HTTP_ORIGIN'] to a
+//     // whitelist of safe domains
+//     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+//     header('Access-Control-Max-Age: 86400');    // cache for 1 day
+// }
+// Access-Control headers are received during OPTIONS requests
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    // Already set in .htaccess, try this later
+    // if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+    //     header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+     http_response_code(200);
+     echo "Preflight OK!";
+}
 
-header("Access-Control-Allow-Methods: GET, HEAD, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Max-Age: 3600");
-
-//header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept" . Config::Get('access-control-headers')->auth . "");
 // set your default time-zone
 date_default_timezone_set('Europe/Stockholm');
 
