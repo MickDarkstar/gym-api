@@ -105,7 +105,7 @@ final class UserRepository extends BaseRepository
             return false;
         }
 
-        return self::find($this->db->lastInsertId());
+        return self::find(self::$dbHandle->lastInsertId());
     }
 
     /**
