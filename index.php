@@ -6,7 +6,17 @@ if ($_SERVER['HTTP_HOST'] === 'localhost') {
     error_reporting(E_ALL);
     Config::$mode = 'dev';
 }
+// Todo: set origin with Config::Get('ACL')->origin
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization-Token");
+header('Access-Control-Allow-Credentials: true');
 
+header('Cache-Control: no-cache');
+
+header("Access-Control-Allow-Methods: GET, HEAD, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Max-Age: 3600");
+
+//header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept" . Config::Get('access-control-headers')->auth . "");
 // set your default time-zone
 date_default_timezone_set('Europe/Stockholm');
 
