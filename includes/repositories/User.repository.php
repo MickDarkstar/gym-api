@@ -91,7 +91,7 @@ final class UserRepository extends BaseRepository
      * @param AppUser $user
      * @return AppUser
      */
-    public function create(CreateUser $user)
+    public function create(AppUserCreate $user)
     {
         $now = date("Y-m-d");
         $req = self::$dbHandle->prepare("INSERT INTO `" . self::DB_TABLE . "`(firstname, lastname, password, email, created) VALUES(:firstname, :lastname, :password, :email, :created)");
