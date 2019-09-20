@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, " . Config::Get('access-control-headers')->auth . ", X-Requested-With");
-
+header('X-Content-Type-Options: nosniff');
 // Todo: proper Router with less redundancy of code. Get rid of switch-cases and get following method once: $httpRequest = $_SERVER['REQUEST_METHOD'];
 Router::set('index.php', function () {
     IndexController::Home();
