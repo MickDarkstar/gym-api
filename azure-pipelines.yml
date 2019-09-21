@@ -28,4 +28,4 @@ steps:
       !azure-pipelines.yml
       !README.MD
       !TODO.txt
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    TargetFolder: '$(System.DefaultWorkingDirectory)/_Gym logger'
