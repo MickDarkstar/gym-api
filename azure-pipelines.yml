@@ -23,6 +23,9 @@ steps:
     Contents: |
       **
       !**/.git/**
+      !**/config/**
+      !.gitignore
+      !azure-pipelines.yml
       !README.MD
       !TODO.txt
     TargetFolder: '$(Build.ArtifactStagingDirectory)\deploy'
