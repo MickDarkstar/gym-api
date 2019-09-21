@@ -21,4 +21,4 @@ steps:
 - task: CopyFiles@2
   inputs:
     Contents: '**'
-    TargetFolder: '/Gym logger'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
