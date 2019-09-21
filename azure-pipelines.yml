@@ -18,16 +18,9 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 # Starter pipeline
-- task: FtpUpload@2
+- task: CopyFiles@2
   inputs:
-    credentialsOption: 'inputs'
-    serverUrl: 'ftp://brothersofmetal.net'
-    username: 'brothersofmetal.net'
-    password: 'sonofodinX666'
-    rootDirectory: '/'
-    filePatterns: '**'
-    remoteDirectory: '/upload/$(Build.BuildId)/'
-    clean: false
-    cleanContents: false
-    preservePaths: false
-    trustSSL: false
+    SourceFolder: '/'
+    Contents: '**'
+    TargetFolder: '/gym-api-artifact'
+    CleanTargetFolder: true
