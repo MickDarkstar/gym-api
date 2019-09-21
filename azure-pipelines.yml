@@ -21,6 +21,7 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: |
+      **
       !**\.git\**
       !README.md
       !TODO.txt'**'
