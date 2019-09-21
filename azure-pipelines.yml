@@ -28,4 +28,4 @@ steps:
       !azure-pipelines.yml
       !README.MD
       !TODO.txt
-    TargetFolder: '$(System.DefaultWorkingDirectory)/TESTGym logger'
+    TargetFolder: '$(System.DefaultWorkingDirectory)/TESTGym logger2'
