@@ -22,7 +22,7 @@ steps:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: |
       **
-      !**\.git\**
-      !README.md
+      !**/.git/**
+      !README.MD
       !TODO.txt
     TargetFolder: '$(Build.ArtifactStagingDirectory)\deploy'
