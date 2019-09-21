@@ -20,7 +20,5 @@ steps:
 # Starter pipeline
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '/'
     Contents: '**'
-    TargetFolder: '/gym-api-artifact'
-    CleanTargetFolder: true
+    TargetFolder: '$(System.DefaultWorkingDirectory)/Gym logger'
