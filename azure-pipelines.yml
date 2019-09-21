@@ -21,4 +21,4 @@ steps:
 - task: CopyFiles@2
   inputs:
     Contents: '**'
-    TargetFolder: '$(System.DefaultWorkingDirectory)/Gym logger'
+    TargetFolder: '$(Agent.BuildDirectory)'
