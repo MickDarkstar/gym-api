@@ -28,6 +28,9 @@ final class ExerciseController extends BaseController
 
         $data = parent::HttpRequestInput();
 
+        $validation = $this->service->validateExerciseData($data);
+        parent::HandleValidationErrors($validation);
+
         $exercise = Exercise::Create(
             parent::$currentUser,
             $data->muscleId,
@@ -35,11 +38,13 @@ final class ExerciseController extends BaseController
             $data->type,
             $data->level
         );
-        $validation = $this->service->validateCreateExercise($exercise);
-        parent::HandleValidationErrors($validation);
-        
+
         $result = $this->service->Create($exercise);
-        echo ApiResponse::Created("Exercise created", $result);
+        if ($result === false) {
+            echo ApiResponse::Warning("Could not create exercise");
+        } else {
+            echo ApiResponse::Created("Exercise created", $result);
+        }
     }
 
     public function Update()

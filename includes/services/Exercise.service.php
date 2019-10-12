@@ -24,14 +24,10 @@ final class ExerciseService
     /**
      * @return ValidationMessage
      */
-    public static function validateCreateExercise(Exercise $model)
+    public static function validateExerciseData($data)
     {
         $validationMessage = new ValidationMessage();
-        if ($model->createdByUserId === null) {
-            $validationMessage->Add("Exercise", "CreatedByUserId is required to create entry. ");
-        }
-
-        if ($model->name === null) {
+        if (isset($data->name) === false) {
             $validationMessage->Add("Exercise", "Name is required to create Exercise. ");
         }
 
