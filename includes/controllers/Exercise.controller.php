@@ -77,9 +77,13 @@ final class ExerciseController extends BaseController
         $exercise = $this->service->getById($data->id);
         if ($exercise === null) {
             echo ApiResponse::Warning("Exercise does not exist");
-        } else {
-            $result = $this->service->delete($exercise);
-            echo ApiResponse::Ok("Deleted exercise", $result);
+            die();
         }
+        $result = $this->service->delete($exercise);
+        if ($result === false) {
+            echo ApiResponse::Warning("Could not delete exercise, it may be in use");
+            die();
+        }
+        echo ApiResponse::Ok("Deleted exercise", $result);
     }
 }
