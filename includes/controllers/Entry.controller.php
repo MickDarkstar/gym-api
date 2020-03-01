@@ -117,13 +117,15 @@ final class EntryController extends BaseController
                 $data->reps,
                 $data->rest,
                 $data->sets,
+                $data->date,
                 $data->comment
             );
             $result = $this->service->updateEntryDetail($model);
 
-            echo ($result)
-                ? ApiResponse::Ok("Updated Entry info", $result)
-                : ApiResponse::InternalServerError("Could not update Entry info", $result);
+            echo ($result) ?
+                ApiResponse::Ok("Updated Entry info", $result)
+                :
+                ApiResponse::InternalServerError("Could not update Entry info", $result);
         }
     }
 

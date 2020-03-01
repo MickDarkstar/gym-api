@@ -273,6 +273,7 @@ final class EntryRepository extends BaseRepository
                 reps = :reps,
                 sets = :sets,
                 rest = :rest,
+                date = :date,
                 comment = :comment,
                 modifiedByUserId = :modifiedByUserId 
             WHERE id = :id";
@@ -285,6 +286,8 @@ final class EntryRepository extends BaseRepository
         $stmt->bindParam(':reps', $model->reps);
         $stmt->bindParam(':sets', $model->sets);
         $stmt->bindParam(':rest', $model->rest);
+        $stmt->bindParam(':date', $model->date);
+
         $stmt->bindParam(':comment', $model->comment);
 
         $stmt->bindParam(':modifiedByUserId', $model->modifiedByUserId);

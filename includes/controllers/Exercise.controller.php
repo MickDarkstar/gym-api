@@ -40,10 +40,10 @@ final class ExerciseController extends BaseController
         );
 
         $result = $this->service->Create($exercise);
-        if ($result === false) {
-            echo ApiResponse::Warning("Could not create exercise");
-        } else {
+        if ($result) {
             echo ApiResponse::Created("Exercise created", $result);
+        } else {
+            echo ApiResponse::Warning("Could not create exercise");
         }
     }
 
@@ -52,20 +52,23 @@ final class ExerciseController extends BaseController
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
-        $exercise = $this->service->getById($data->id);
-        if ($exercise === null) {
+        $model = $this->service->getById($data->id);
+        if ($model === null) {
             echo ApiResponse::Warning("Exercise does not exist");
-        } else {
-            $exercise->Update(
+        } else if ($model instanceof Exercise) {
+            $model->Update(
                 parent::$currentUser,
                 $data->muscleId,
                 $data->name,
                 $data->type,
                 $data->level
             );
-            $result = $this->service->update($exercise);
+            $result = $this->service->update($model);
 
             echo ($result) ? ApiResponse::Ok("Updated exercise info", $result) : ApiResponse::Ok("Could not update exercise info", $result);
+        } else {
+            echo ApiResponse::Warning("Something went wrong, exercise could not be updated");
+            die();
         }
     }
 
