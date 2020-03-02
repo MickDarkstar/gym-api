@@ -6,6 +6,7 @@ final class Exercise extends Base
      */
     public $id;
     public $muscleId;
+    public $muscle;
     public $name;
     public $type;
     public $level;
@@ -15,10 +16,12 @@ final class Exercise extends Base
         $muscleId = null,
         $name,
         $type,
-        $level
+        $level,
+        $muscle = null
     ) {
         $this->id = $id;
         $this->muscleId = $muscleId;
+        $this->muscle = $muscle;
         $this->name = $name;
         $this->type = $type;
         $this->level = $level;

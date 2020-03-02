@@ -14,7 +14,7 @@ final class Muscle
      */
     public $muscleGroup;
 
-    public function __construct($id, string $name, MuscleGroup $muscleGroup)
+    public function __construct($id, string $name, MuscleGroup $muscleGroup = null)
     {
         $this->id = $id;
         $this->name = $name;

@@ -1,8 +1,7 @@
 <?php
-final class ExerciseRepository extends BaseRepository
+final class MuscleRepository extends BaseRepository
 {
-    const DB_TABLE = "gym_exercise";
-    const DB_TABLE_MUSCLES = "gym_muscle";
+    const DB_TABLE = "gym_muscle";
 
     public function __construct(PDO $pdo = null)
     {
@@ -11,19 +10,11 @@ final class ExerciseRepository extends BaseRepository
 
     private function mapToModel($row)
     {
-        $model = new Exercise(
+        $model = new Muscle(
             $row['id'],
-            $row['muscleId'],
-            $row['name'],
-            $row['type'],
-            $row['level']
+            $row['name']
         );
 
-        if (isset($row['muscleName']) && isset($row['muscleGroupId'])) {
-            $muscleGroup = ($row['muscleGroupId'] > 0 && $row['muscleGroupId'] < 7) ? MuscleGroupStaticRepository::Get($row['muscleGroupId']) : null;
-            $model->muscle = new Muscle($row['muscleId'], $row['muscleName'], $muscleGroup);
-        }
-        $model = self::mapHistoricalData($model, $row);
         return $model;
     }
 
@@ -37,42 +28,24 @@ final class ExerciseRepository extends BaseRepository
         return $models;
     }
 
-    public function validate(Exercise $exercise)
+    public function validate(Muscle $model)
     {
-        if ($exercise->createdByUserId === null) {
+        if ($model->createdByUserId === null) {
             http_response_code(400);
-            echo json_encode(array("message" => "CreatedByUserId is required to create exercise. "));
+            echo json_encode(array("message" => "CreatedByUserId is required to create muscle. "));
             return false;
         }
 
-        if ($exercise->name === null) {
+        if ($model->name === null) {
             http_response_code(400);
-            echo json_encode(array("message" => "Name is required to create exercise. "));
+            echo json_encode(array("message" => "Name is required to create muscle. "));
             return false;
         }
 
-        if ($exercise->type === null) {
-            http_response_code(400);
-            echo json_encode(array("message" => "Type is required to create exercise."));
-            return false;
-        }
-
-        // Not yet implemented
-        // if ($exercise->muscle === null) {
-        //     http_response_code(400);
-        //     echo json_encode(array("message" => "Muscle is required to create exercise."));
-        //     return false;
-        // }
-
-        if ($exercise->level === null || $exercise->level === "") {
-            http_response_code(400);
-            echo json_encode(array("message" => "Level is required to create exercise."));
-            return false;
-        }
         return true;
     }
 
-    public function exerciseExist(int $id)
+    public function modelExist(int $id)
     {
         $query = "SELECT id password
                     FROM " . self::DB_TABLE . "
@@ -120,21 +93,16 @@ final class ExerciseRepository extends BaseRepository
         return false;
     }
 
-    public function create(Exercise $exercise)
+    public function create(Muscle $model)
     {
         $query = "INSERT INTO " . self::DB_TABLE . "
         SET
-            createdByUserId = :createdByUserId,
-            name = :name,
-            type = :type,
-            muscleId = :muscleId";
+            name = :name";
 
         $stmt = self::$dbHandle->prepare($query);
 
-        $stmt->bindParam(':createdByUserId', $exercise->createdByUserId);
-        $stmt->bindParam(':name', $exercise->name);
-        $stmt->bindParam(':type', $exercise->type);
-        $stmt->bindParam(':muscleId', $exercise->muscleId);
+        $stmt->bindParam(':createdByUserId', $model->createdByUserId);
+        $stmt->bindParam(':name', $model->name);
 
         if ($stmt->execute()) {
             return true;
@@ -163,26 +131,20 @@ final class ExerciseRepository extends BaseRepository
         }
     }
 
-    public function update(Exercise $exercise)
+    public function update(Muscle $model)
     {
         $query = "UPDATE " . self::DB_TABLE . "
             SET
-                modifiedByUserId = :modifiedByUserId,
                 name = :name,
-                type = :type,
-                muscleId = :muscleId,
-                level = :level
+                muscleGroupId = :muscleGroupId
             WHERE id = :id";
 
         $stmt = self::$dbHandle->prepare($query);
 
-        $stmt->bindParam(':modifiedByUserId', $exercise->modifiedByUserId);
-        $stmt->bindParam(':name', $exercise->name);
-        $stmt->bindParam(':type', $exercise->type);
-        $stmt->bindParam(':muscleId', $exercise->muscleId);
-        $stmt->bindParam(':level', $exercise->level);
-
-        $stmt->bindParam(':id', $exercise->id);
+        $stmt->bindParam(':muscleGroupId', $model->muscleGroup);
+        $stmt->bindParam(':name', $model->name);
+        
+        $stmt->bindParam(':id', $model->id);
 
         if ($stmt->execute()) {
             return true;
@@ -193,9 +155,8 @@ final class ExerciseRepository extends BaseRepository
 
     public function getAll()
     {
-        $query = "SELECT e.*, m.name as muscleName, m.muscleGroupId 
-        FROM " . self::DB_TABLE . " e 
-        inner join " . self::DB_TABLE_MUSCLES . " m on m.id = e.muscleId";
+        $query = "SELECT *
+        FROM " . self::DB_TABLE;
 
         $stmt = self::$dbHandle->prepare($query);
 
@@ -205,7 +166,7 @@ final class ExerciseRepository extends BaseRepository
         return self::mapToModels($rows);
     }
 
-    public function delete(Exercise $exercise)
+    public function delete(Muscle $model)
     {
         $query = "DELETE
                     FROM " . self::DB_TABLE . "
@@ -214,7 +175,7 @@ final class ExerciseRepository extends BaseRepository
 
         $stmt = self::$dbHandle->prepare($query);
 
-        $stmt->bindParam(1, $exercise->id);
+        $stmt->bindParam(1, $model->id);
 
         $stmt->execute();
 

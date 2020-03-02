@@ -50,9 +50,6 @@ final class ExerciseService
         return $this->repository->getById($id);
     }
 
-    /**
-     * Not implemented
-     */
     public function muscleExists(int $muscleId)
     {
         return $this->repository->muscleExists($muscleId);
