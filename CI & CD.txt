@@ -1,0 +1,2 @@
+Automatic deploy https://fehrm.visualstudio.com/Gym%20logger/_git/Gym-api (push):
+ $ push: git remote devops master
