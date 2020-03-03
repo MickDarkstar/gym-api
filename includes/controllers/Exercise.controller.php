@@ -28,6 +28,9 @@ final class ExerciseController extends BaseController
 
         $data = parent::HttpRequestInput();
 
+        $validation = $this->service->validateExerciseData($data);
+        parent::HandleValidationErrors($validation);
+
         $exercise = Exercise::Create(
             parent::$currentUser,
             $data->muscleId,
@@ -35,11 +38,13 @@ final class ExerciseController extends BaseController
             $data->type,
             $data->level
         );
-        $validation = $this->service->validateCreateExercise($exercise);
-        parent::HandleValidationErrors($validation);
-        
+
         $result = $this->service->Create($exercise);
-        echo ApiResponse::Created("Exercise created", $result);
+        if ($result) {
+            echo ApiResponse::Created("Exercise created", $result);
+        } else {
+            echo ApiResponse::Warning("Could not create exercise");
+        }
     }
 
     public function Update()
@@ -47,20 +52,23 @@ final class ExerciseController extends BaseController
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
-        $exercise = $this->service->getById($data->id);
-        if ($exercise === null) {
+        $model = $this->service->getById($data->id);
+        if ($model === null) {
             echo ApiResponse::Warning("Exercise does not exist");
-        } else {
-            $exercise->Update(
+        } else if ($model instanceof Exercise) {
+            $model->Update(
                 parent::$currentUser,
                 $data->muscleId,
                 $data->name,
                 $data->type,
                 $data->level
             );
-            $result = $this->service->update($exercise);
+            $result = $this->service->update($model);
 
             echo ($result) ? ApiResponse::Ok("Updated exercise info", $result) : ApiResponse::Ok("Could not update exercise info", $result);
+        } else {
+            echo ApiResponse::Warning("Something went wrong, exercise could not be updated");
+            die();
         }
     }
 
@@ -72,9 +80,13 @@ final class ExerciseController extends BaseController
         $exercise = $this->service->getById($data->id);
         if ($exercise === null) {
             echo ApiResponse::Warning("Exercise does not exist");
-        } else {
-            $result = $this->service->delete($exercise);
-            echo ApiResponse::Ok("Deleted exercise", $result);
+            die();
         }
+        $result = $this->service->delete($exercise);
+        if ($result === false) {
+            echo ApiResponse::Warning("Could not delete exercise, it may be in use");
+            die();
+        }
+        echo ApiResponse::Ok("Deleted exercise", $result);
     }
 }

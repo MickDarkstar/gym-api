@@ -13,7 +13,7 @@ PHP Boilerplate REST-API with jwt token authentication
 -- OOP och multitier architecture (fyra lager där middleware användas före och efter lager beroende på syfte)
 -- *Konstanter*: läggs i /includes/Constants.php, MiddleWare har dock en constant i MiddleWare.settings.php som bör ses över.
 
--- *MiddleWare*: Mellanlager som används före anrop för authentisering och verifiering av användare. Används för och efter anrop beroende på case. 
+-- *MiddleWare*: Mellanlager som används före anrop för authentisering och verifiering av användare. Används före och efter anrop, beroende på case. 
 
 -- *Basklasser*: Basklasser finns för nästan alla typer av klasser och skall populeras med återanvändbar kod för att följa DRY-principen
 

@@ -43,6 +43,21 @@ Router::set('login', function () {
     }
 });
 
+Router::set('muscles', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new MuscleController();
+
+    switch ($httpRequest) {
+        case 'GET':
+            $controller->All();
+            break;
+
+        default:
+            echo ApiResponse::MethodNotAllowed();
+            break;
+    }
+});
+
 Router::set('exercises', function () {
     $httpRequest = $_SERVER['REQUEST_METHOD'];
     $controller = new ExerciseController();

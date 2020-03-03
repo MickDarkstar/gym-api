@@ -54,10 +54,10 @@ final class EntryController extends BaseController
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
-        $model = $this->service->getById($data->id);
+        $model = $this->service->getEntryById($data->id);
         if ($model === null) {
             echo ApiResponse::Warning("Entry does not exist");
-        } else {
+        } else if ($model instanceof Entry){
             $model->Update(
                 $data->comment
             );
@@ -80,7 +80,7 @@ final class EntryController extends BaseController
             die();
         }
 
-        $todaysEntry = $this->getOrCreateTodaysEntry($user);
+        $todaysEntry = $this->GetOrCreateTodaysEntry($user);
         if ($todaysEntry instanceof Entry === false) {
             echo ApiResponse::InternalServerError("Error creating todays workout entry");
             die();
@@ -117,13 +117,15 @@ final class EntryController extends BaseController
                 $data->reps,
                 $data->rest,
                 $data->sets,
+                $data->date,
                 $data->comment
             );
             $result = $this->service->updateEntryDetail($model);
 
-            echo ($result)
-                ? ApiResponse::Ok("Updated Entry info", $result)
-                : ApiResponse::InternalServerError("Could not update Entry info", $result);
+            echo ($result) ?
+                ApiResponse::Ok("Updated Entry info", $result)
+                :
+                ApiResponse::InternalServerError("Could not update Entry info", $result);
         }
     }
 
@@ -158,7 +160,7 @@ final class EntryController extends BaseController
         }
     }
 
-    private function getOrCreateTodaysEntry(AppUser $user)
+    private function GetOrCreateTodaysEntry(AppUser $user)
     {
         $todaysEntry = $this->service->getTodaysEntry(parent::$currentUser);
         if ($todaysEntry instanceof Entry === false) {

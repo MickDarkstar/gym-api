@@ -47,3 +47,4 @@ $RECYCLE.BIN/
 config/live/database.json
 config/live/middleware.json
 config/live/cors.json
+config/live/db.sql

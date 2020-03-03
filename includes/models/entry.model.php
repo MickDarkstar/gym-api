@@ -20,4 +20,8 @@ final class Entry extends Base
         $this->entryDetails = $entryDetails;
         $this->comment = $comment;
     }
+
+    public function Update($comment) {
+        $this->comment = $comment;
+    }
 }

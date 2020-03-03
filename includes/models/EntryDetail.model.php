@@ -69,12 +69,14 @@ final class EntryDetail extends Base
         $reps,
         $rest,
         $sets,
+        $date,
         $comment
     ) {
         $this->weight   = $weight;
         $this->reps     = $reps;
         $this->rest     = $rest;
         $this->sets     = $sets;
+        $this->date     = $date;
         $this->comment  = $comment;
         $this->setModifiedByUser($user);
     }
