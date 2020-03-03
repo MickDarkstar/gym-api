@@ -13,7 +13,7 @@ final class Muscle
      * @var string $muscleGroup Should contain a MuscleGroup
      */
     public $muscleGroup;
-
+ 
     public function __construct($id, string $name, MuscleGroup $muscleGroup = null)
     {
         $this->id = $id;

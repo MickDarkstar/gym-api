@@ -8,7 +8,7 @@ final class Entry extends Base
     public $date;
     public $entryDetails;
     public $comment;
-
+ 
     public function __construct(
         $id = null,
         $date,
