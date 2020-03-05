@@ -93,7 +93,6 @@ final class EntryRepository extends BaseRepository
 
         // $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $rows = $stmt->fetchAll();
-        return $rows;
         return self::mapToEntries($rows);
     }
 
@@ -288,6 +287,7 @@ final class EntryRepository extends BaseRepository
         $stmt->bindParam(':rest', $model->rest);
         $stmt->bindParam(':date', $model->date);
 
+        // Todo: se över varför date ej går att sätta...
         $stmt->bindParam(':comment', $model->comment);
 
         $stmt->bindParam(':modifiedByUserId', $model->modifiedByUserId);
