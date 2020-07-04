@@ -26,4 +26,9 @@ class BaseRepository
     $model->modified = $row['modified'];
     return $model;
   }
+
+  protected static function IsInvalidId($id)
+  {
+    return ($id === null || $id < 1);
+  }
 }
