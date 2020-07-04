@@ -116,7 +116,7 @@ Router::set('entrydetails', function () {
         case 'POST':
             $controller->CreateEntryDetail();
             break;
-        case 'PUT':
+        case 'PATCH':
             $controller->UpdateEntryDetail();
             break;
         case 'DELETE':
@@ -136,6 +136,48 @@ Router::set('currententry', function () {
         case 'GET':
             $controller->Current();
             break;
+        default:
+            echo ApiResponse::MethodNotAllowed();
+            break;
+    }
+});
+
+Router::set('workouts', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new WorkoutController();
+
+    switch ($httpRequest) {
+        case 'GET':
+            $controller->All();
+            break;
+        case 'POST':
+            $controller->Create();
+            break;
+        case 'PUT':
+            $controller->Update();
+            break;
+        case 'DELETE':
+            $controller->Delete();
+            break;
+
+        default:
+            echo ApiResponse::MethodNotAllowed();
+            break;
+    }
+});
+
+Router::set('workoutexercises', function () {
+    $httpRequest = $_SERVER['REQUEST_METHOD'];
+    $controller = new WorkoutController();
+
+    switch ($httpRequest) {
+        case 'POST':
+            $controller->AddWorkoutExercise();
+            break;
+        case 'DELETE':
+            $controller->DeleteWorkoutExercise();
+            break;
+
         default:
             echo ApiResponse::MethodNotAllowed();
             break;

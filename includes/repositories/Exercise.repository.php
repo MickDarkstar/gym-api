@@ -202,7 +202,7 @@ final class ExerciseRepository extends BaseRepository
         $stmt->execute();
 
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return self::mapToModels($rows);
+        return $this->mapToModels($rows);
     }
 
     public function delete(Exercise $exercise)
