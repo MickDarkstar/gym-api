@@ -72,10 +72,10 @@ final class EntryController extends BaseController
         $user = parent::Authorize();
         $data = parent::HttpRequestInput();
 
-        $exerciseResponse = $this->exerciseService->getById($data->exerciseId);
-        parent::HandleValidationErrors($exerciseResponse);
+        $exercise = $this->exerciseService->getById($data->exerciseId);
+        parent::HandleValidationErrors($exercise);
 
-        if ($exerciseResponse instanceof Exercise === false) {
+        if ($exercise instanceof Exercise === false) {
             echo ApiResponse::InternalServerError("Incorrect exercise id, it may have been removed");
             die();
         }
@@ -88,7 +88,7 @@ final class EntryController extends BaseController
 
         $model = EntryDetail::Create(
             $todaysEntry->id,
-            $exerciseResponse,
+            $exercise,
             $user
         );
 
@@ -98,8 +98,8 @@ final class EntryController extends BaseController
         $result = $this->service->createEntryDetail($model);
 
         echo ($result > 0)
-            ? ApiResponse::Created("EntryDetail created", $result)
-            : ApiResponse::Created("EntryDetail could not be created", $result);
+            ? ApiResponse::Created("Added: ".$exercise->name, $result)
+            : ApiResponse::Created("Could not be add: ".$exercise->name, $result);
     }
 
     public function UpdateEntryDetail()

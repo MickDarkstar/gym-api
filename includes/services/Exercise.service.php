@@ -39,14 +39,11 @@ final class ExerciseService
         return $this->repository->exerciseExist($id);
     }
 
+    /**
+     * @return Exercise
+     */
     public function getById($id)
     {
-        $id = htmlspecialchars(strip_tags($id));
-        if ($id > 0 === false || $id === "") {
-            $validation = new ValidationMessage();
-            $validation->invalid("Exercise", "Invalid id");
-            return $validation;
-        }
         return $this->repository->getById($id);
     }
 

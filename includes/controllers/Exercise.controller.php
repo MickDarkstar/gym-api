@@ -77,16 +77,26 @@ final class ExerciseController extends BaseController
         parent::Authorize();
 
         $data = parent::HttpRequestInput();
+
+        if (!isset($data) || !isset($data->id)) {
+            echo ApiResponse::Warning("Exercise.Delete => data is empty");
+            die();
+        }
+        
         $exercise = $this->service->getById($data->id);
-        if ($exercise === null) {
+        if (isset($exercise) === false) {
             echo ApiResponse::Warning("Exercise does not exist");
             die();
         }
+        
+        parent::HandleValidationErrors($exercise);
+        
         $result = $this->service->delete($exercise);
         if ($result === false) {
             echo ApiResponse::Warning("Could not delete exercise, it may be in use");
             die();
+        } else {
+            echo ApiResponse::Ok("Deleted exercise", $result);
         }
-        echo ApiResponse::Ok("Deleted exercise", $result);
     }
 }

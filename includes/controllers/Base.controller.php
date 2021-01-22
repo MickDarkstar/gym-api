@@ -45,6 +45,16 @@ class BaseController
         }
     }
 
+    protected static function ValidId($id)
+    {
+        $validation = new ValidationMessage();
+        $id = htmlspecialchars(strip_tags($id));
+        if ($id > 0 === false || $id === "") {
+            $validation->invalid("Invalid id");
+        }
+        return $validation;
+    }
+
     protected static function HttpRequestInput()
     {
         return json_decode(file_get_contents("php://input"));
